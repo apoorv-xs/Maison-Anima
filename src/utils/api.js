@@ -118,7 +118,7 @@ export const MaisonCloudDB = {
           } else {
             reject(new Error("Invalid or expired Maison registry sync token."));
           }
-        } catch (e) {
+        } catch {
           reject(new Error("Cloud DB retrieval failed."));
         }
       }, 1200); // Simulated query response time
