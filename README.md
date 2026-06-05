@@ -2,6 +2,8 @@
 
 A premium, high-fidelity luxury e-commerce frontend experience inspired by archival Gucci aesthetics. Built with modern React 19, React Router 7, Vite, and GSAP animations.
 
+![Maison Anima Home Page Screenshot](./assets/screenshot.jpg)
+
 ---
 
 ## ✨ Key Features
