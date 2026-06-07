@@ -998,7 +998,17 @@ a {
     }
 }
 
+.mobile-only {
+    display: none !important;
+}
+
 @media (max-width: 768px) {
+    .desktop-only {
+        display: none !important;
+    }
+    .mobile-only {
+        display: inline-block !important;
+    }
     .header-container {
         padding: 20px;
     }
@@ -1046,3 +1056,92 @@ a {
         transform: none !important;
     }
 }
+
+/* =============================================================================
+   8. SHOWCASE ELEVATION STYLES (MONOGRAM FOILS, STEAM, AND BOUTIQUE GRID)
+   ============================================================================= */
+.monogram-gold {
+    background: linear-gradient(135deg, #CFAC62 0%, #EDD397 25%, #CFAC62 50%, #F5E7C4 75%, #A37F33 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--font-serif);
+    text-transform: uppercase;
+    font-weight: 600;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15), 0px 0px 2px rgba(212, 175, 55, 0.3);
+    animation: goldShimmer 4s linear infinite;
+    display: inline-block;
+}
+
+/* Blind Deboss: blends into specific leather finishes with indentation shadows */
+.monogram-blind-original {
+    color: #4b301c;
+    mix-blend-mode: multiply;
+    text-shadow: 0.5px 0.5px 0.5px rgba(255, 255, 255, 0.15), -0.5px -0.5px 0.8px rgba(0, 0, 0, 0.65);
+    opacity: 0.82;
+}
+
+.monogram-blind-rosso {
+    color: #290805;
+    mix-blend-mode: multiply;
+    text-shadow: 0.5px 0.5px 0.5px rgba(255, 255, 255, 0.1), -0.5px -0.5px 0.8px rgba(0, 0, 0, 0.7);
+    opacity: 0.85;
+}
+
+.monogram-blind-smeraldo {
+    color: #081a13;
+    mix-blend-mode: multiply;
+    text-shadow: 0.5px 0.5px 0.5px rgba(255, 255, 255, 0.08), -0.5px -0.5px 0.8px rgba(0, 0, 0, 0.7);
+    opacity: 0.85;
+}
+
+.monogram-blind-nero {
+    color: #171717;
+    mix-blend-mode: multiply;
+    text-shadow: 0.5px 0.5px 0.5px rgba(255, 255, 255, 0.08), -0.5px -0.5px 0.8px rgba(0, 0, 0, 0.75);
+    opacity: 0.88;
+}
+
+/* Steam puff hot stamping visual effect */
+.steam-puff {
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.6);
+    filter: blur(8px);
+}
+
+/* Floating boutique layout grids showing Golden Ratio proportions */
+.boutique-grid-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 99;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.boutique-grid-overlay.active {
+    opacity: 0.25;
+}
+
+.grid-line {
+    width: 1px;
+    height: 100%;
+    background-color: var(--accent-siena);
+}
+
+.grid-horizontal-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--accent-siena);
+}
+
