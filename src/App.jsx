@@ -65,7 +65,7 @@ function RouteTransition({
       }}
     >
       <Routes location={displayLocation}>
-        <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
+        <Route path="/" element={<Home onAddToCart={handleAddToCart} monogramPrefs={monogramPrefs} onUpdatePrefs={handleUpdatePrefs} />} />
         <Route path="/collections" element={<Collections onAddToCart={handleAddToCart} />} />
         <Route path="/customizer" element={<Customization onAddToCart={handleAddToCart} monogramPrefs={monogramPrefs} onUpdatePrefs={handleUpdatePrefs} />} />
         <Route path="/craft" element={<Craft />} />

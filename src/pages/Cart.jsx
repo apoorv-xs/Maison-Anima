@@ -433,17 +433,10 @@ function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity, currentUser, 
                         setRestoreSuccess(false);
                         try {
                           const restoredCart = await MaisonCloudDB.retrieveCart(restoreToken);
-                          // Replace cart via clearing and adding items
+                          // Replace cart via clearing and direct persistence
                           onClearCart();
-                          // We need to set items — use a small timeout to let clear propagate
+                          // Use a small timeout to let clear propagate, then write restored cart
                           setTimeout(() => {
-                            restoredCart.forEach(item => {
-                              for (let i = 0; i < item.quantity; i++) {
-                                // Re-add each item
-                                // This goes through the parent handler
-                              }
-                            });
-                            // Directly set via localStorage and reload for simplicity
                             localStorage.setItem('maison_anima_cart', JSON.stringify(restoredCart));
                             setIsRestoring(false);
                             setRestoreSuccess(true);

@@ -29,7 +29,14 @@ function BagDrawer({ isOpen, onClose, cart, onRemoveItem }) {
                     <h4 className="cart-item-name">{item.name}</h4>
                     <p className="cart-item-meta">{metaText}</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: '8px' }}>
-                      <span className="cart-item-price">${(item.price * item.quantity).toLocaleString()}</span>
+                      <span className="cart-item-price">
+                        ${(item.price * item.quantity).toLocaleString()}
+                        {item.quantity > 1 && (
+                          <span style={{ fontSize: '0.72rem', color: '#6A6764', fontWeight: 'normal', marginLeft: '6px' }}>
+                            ({item.quantity} × ${item.price.toLocaleString()})
+                          </span>
+                        )}
+                      </span>
                       <button className="remove-item-btn font-sans" onClick={() => onRemoveItem(index)}>Remove</button>
                     </div>
                   </div>

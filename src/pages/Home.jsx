@@ -4,7 +4,7 @@ import Editorial from '../components/Editorial';
 import Customizer from '../components/Customizer';
 import Quote from '../components/Quote';
 
-function Home({ onAddToCart }) {
+function Home({ onAddToCart, monogramPrefs, onUpdatePrefs }) {
   useEffect(() => {
     if (window.gsap) {
       const gsap = window.gsap;
@@ -132,7 +132,7 @@ function Home({ onAddToCart }) {
     <div>
       <Hero />
       <Editorial onAddToCart={onAddToCart} />
-      <Customizer onAddToCart={onAddToCart} />
+      <Customizer onAddToCart={onAddToCart} defaultPrefs={monogramPrefs} onUpdatePrefs={onUpdatePrefs} />
       <Quote />
     </div>
   );
