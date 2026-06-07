@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MaisonCloudDB } from '../utils/api';
 
-function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity }) {
+function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity, currentUser, onCheckoutSuccess }) {
   const [giftWrapping, setGiftWrapping] = useState('signature'); // signature | eco
   const [isGift, setIsGift] = useState(false);
   const [giftNote, setGiftNote] = useState('');
   
   // Checkout flow states
   const [checkoutStep, setCheckoutStep] = useState('cart'); // cart | success
-  const [name, setName] = useState('');
+  const [name, setName] = useState(currentUser ? currentUser.name : '');
   const [address, setAddress] = useState('');
   const [card, setCard] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,6 +22,7 @@ function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity }) {
   const [isRestoring, setIsRestoring] = useState(false);
   const [restoreError, setRestoreError] = useState('');
   const [restoreSuccess, setRestoreSuccess] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
@@ -45,7 +46,11 @@ function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity }) {
     setTimeout(() => {
       setIsSubmitting(false);
       setCheckoutStep('success');
-      onClearCart();
+      if (onCheckoutSuccess) {
+        onCheckoutSuccess(cart, subtotal);
+      } else {
+        onClearCart();
+      }
     }, 2000);
   };
 
@@ -306,7 +311,7 @@ function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity }) {
                       setIsSyncing(true);
                       setSyncSuccess(false);
                       setSyncToken('');
-                      const token = await MaisonCloudDB.syncCart(cart);
+                      const token = await MaisonCloudDB.syncCart(cart, giftNote, giftWrapping);
                       setIsSyncing(false);
                       if (token) {
                         setSyncToken(token);
@@ -362,8 +367,36 @@ function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity }) {
                       }}>
                         {syncToken}
                       </div>
-                      <p className="font-sans" style={{ fontSize: '0.7rem', color: '#6A6764', marginTop: '10px', textAlign: 'center' }}>
-                        Save this token to restore your bag on any device.
+                      
+                      <button
+                        onClick={() => {
+                          const url = `${window.location.origin}/registry/${syncToken}`;
+                          navigator.clipboard.writeText(url);
+                          setLinkCopied(true);
+                          setTimeout(() => setLinkCopied(false), 2000);
+                        }}
+                        style={{
+                          marginTop: '16px',
+                          width: '100%',
+                          padding: '12px',
+                          borderRadius: '20px',
+                          border: 'none',
+                          backgroundColor: '#B97C52',
+                          color: '#FFFFFF',
+                          fontFamily: 'var(--font-sans)',
+                          fontSize: '0.7rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em',
+                          fontWeight: 500,
+                          cursor: 'pointer',
+                          transition: 'all 0.3s'
+                        }}
+                      >
+                        {linkCopied ? '✓ Link Copied!' : '📋 Copy Shareable Link'}
+                      </button>
+
+                      <p className="font-sans" style={{ fontSize: '0.7rem', color: '#6A6764', marginTop: '12px', textAlign: 'center' }}>
+                        Save this token or share the link with a partner to co-curate.
                       </p>
                     </div>
                   )}

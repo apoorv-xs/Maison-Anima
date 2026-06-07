@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Ribbon from './components/Ribbon';
 import Header from './components/Header';
 import MenuDrawer from './components/MenuDrawer';
@@ -12,9 +12,27 @@ import Collections from './pages/Collections';
 import Customization from './pages/Customization';
 import Journal from './pages/Journal';
 import Cart from './pages/Cart';
+import Craft from './pages/Craft';
+import Registry from './pages/Registry';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
+import BoutiqueControls from './components/BoutiqueControls';
 
 // Animated Route Switch Helper
-function RouteTransition({ cart, handleAddToCart, handleRemoveItem, handleClearCart, handleUpdateQuantity }) {
+function RouteTransition({ 
+  cart, 
+  handleAddToCart, 
+  handleRemoveItem, 
+  handleClearCart, 
+  handleUpdateQuantity,
+  currentUser,
+  handleLoginSuccess,
+  handleLogout,
+  userOrders,
+  handleCheckoutSuccess,
+  monogramPrefs,
+  handleUpdatePrefs
+}) {
   const location = useLocation();
   const [displayLocation, setDisplayLocation] = useState(location);
   const [transitionStage, setTransitionStage] = useState("fadeIn");
@@ -49,9 +67,34 @@ function RouteTransition({ cart, handleAddToCart, handleRemoveItem, handleClearC
       <Routes location={displayLocation}>
         <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
         <Route path="/collections" element={<Collections onAddToCart={handleAddToCart} />} />
-        <Route path="/customizer" element={<Customization onAddToCart={handleAddToCart} />} />
+        <Route path="/customizer" element={<Customization onAddToCart={handleAddToCart} monogramPrefs={monogramPrefs} />} />
+        <Route path="/craft" element={<Craft />} />
+        <Route path="/registry/:token" element={<Registry onAddToCart={handleAddToCart} />} />
         <Route path="/journal" element={<Journal onAddToCart={handleAddToCart} />} />
-        <Route path="/cart" element={<Cart cart={cart} onRemoveItem={handleRemoveItem} onClearCart={handleClearCart} onUpdateQuantity={handleUpdateQuantity} />} />
+        <Route path="/cart" element={
+          <Cart 
+            cart={cart} 
+            onRemoveItem={handleRemoveItem} 
+            onClearCart={handleClearCart} 
+            onUpdateQuantity={handleUpdateQuantity}
+            currentUser={currentUser}
+            onCheckoutSuccess={handleCheckoutSuccess}
+          />
+        } />
+        <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+        <Route path="/profile" element={
+          currentUser ? (
+            <Profile 
+              currentUser={currentUser} 
+              onLogout={handleLogout} 
+              userOrders={userOrders} 
+              monogramPrefs={monogramPrefs} 
+              onUpdatePrefs={handleUpdatePrefs} 
+            />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        } />
       </Routes>
     </div>
   );
@@ -67,6 +110,35 @@ function App() {
       return [];
     }
   });
+
+  // Global Auth states
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('maison_current_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [userOrders, setUserOrders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('maison_user_orders');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [monogramPrefs, setMonogramPrefs] = useState(() => {
+    try {
+      const saved = localStorage.getItem('maison_monogram_prefs');
+      return saved ? JSON.parse(saved) : { initials: '', foil: 'gold', position: 'strap' };
+    } catch {
+      return { initials: '', foil: 'gold', position: 'strap' };
+    }
+  });
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBagOpen, setIsBagOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -79,6 +151,38 @@ function App() {
       console.error("Failed to save cart to storage:", e);
     }
   }, [cart]);
+
+  // Auth Operations
+  const handleLoginSuccess = (user) => {
+    setCurrentUser(user);
+    localStorage.setItem('maison_current_user', JSON.stringify(user));
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem('maison_current_user');
+  };
+
+  const handleUpdatePrefs = (prefs) => {
+    setMonogramPrefs(prefs);
+    localStorage.setItem('maison_monogram_prefs', JSON.stringify(prefs));
+  };
+
+  const handleCheckoutSuccess = (items, total) => {
+    const newOrder = {
+      id: `ORDER-ANIMA-${Math.floor(100000 + Math.random() * 900000)}`,
+      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+      items: [...items],
+      total: total,
+      status: 'Steeping in Tuscan Dye Baths'
+    };
+    setUserOrders(prev => {
+      const updated = [newOrder, ...prev];
+      localStorage.setItem('maison_user_orders', JSON.stringify(updated));
+      return updated;
+    });
+    setCart([]);
+  };
 
   // Cart operations
   const handleAddToCart = (id, name, price, image, meta = '', monogram = '') => {
@@ -159,8 +263,9 @@ function App() {
           onMenuOpen={() => setIsMenuOpen(true)} 
           onBagOpen={() => setIsBagOpen(true)} 
           isScrolled={isScrolled}
+          currentUser={currentUser}
         />
-        <MenuDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+        <MenuDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} currentUser={currentUser} />
         <BagDrawer 
           isOpen={isBagOpen} 
           onClose={() => setIsBagOpen(false)} 
@@ -177,10 +282,18 @@ function App() {
             handleRemoveItem={handleRemoveItem}
             handleClearCart={handleClearCart}
             handleUpdateQuantity={handleUpdateQuantity}
+            currentUser={currentUser}
+            handleLoginSuccess={handleLoginSuccess}
+            handleLogout={handleLogout}
+            userOrders={userOrders}
+            handleCheckoutSuccess={handleCheckoutSuccess}
+            monogramPrefs={monogramPrefs}
+            handleUpdatePrefs={handleUpdatePrefs}
           />
         </main>
         
         <Footer />
+        <BoutiqueControls />
       </div>
     </Router>
   );

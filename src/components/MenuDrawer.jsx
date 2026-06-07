@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function MenuDrawer({ isOpen, onClose }) {
+function MenuDrawer({ isOpen, onClose, currentUser }) {
   return (
     <div className={`nav-drawer ${isOpen ? 'open' : ''}`} id="navDrawer">
       <div className="drawer-overlay" id="drawerOverlay" onClick={onClose}></div>
@@ -14,7 +14,20 @@ function MenuDrawer({ isOpen, onClose }) {
           <Link to="/" className="drawer-link" onClick={onClose}>Home</Link>
           <Link to="/collections" className="drawer-link" onClick={onClose}>Runway (Leather Goods)</Link>
           <Link to="/customizer" className="drawer-link" onClick={onClose}>Aura Customizer</Link>
+          <Link to="/craft" className="drawer-link" onClick={onClose}>Artisanal Crafts</Link>
           <Link to="/journal" className="drawer-link" onClick={onClose}>Journal Lookbook</Link>
+          
+          <div style={{ margin: '20px 0', borderTop: '1px solid var(--border-color)' }}></div>
+          
+          {currentUser ? (
+            <Link to="/profile" className="drawer-link" onClick={onClose} style={{ color: 'var(--accent-siena)' }}>
+              ⚜ Private Salon
+            </Link>
+          ) : (
+            <Link to="/login" className="drawer-link" onClick={onClose}>
+              Client Sign In
+            </Link>
+          )}
         </nav>
       </div>
     </div>
