@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const swatchesList = [
   { color: 'original', name: 'Siena Tan', hex: '#B97C52' },
@@ -20,7 +20,7 @@ const STAMP_LOCATIONS = {
   clasp: { label: 'Artisanal Clasp', top: '44%', left: '50.3%', zoomX: 0, zoomY: 10 }
 };
 
-function Customizer({ onAddToCart, defaultPrefs }) {
+function Customizer({ onAddToCart, defaultPrefs, onUpdatePrefs }) {
   const [color, setColor] = useState('original');
   const [colorName, setColorName] = useState('Siena Tan');
   const [monogramInput, setMonogramInput] = useState(defaultPrefs?.initials || '');
@@ -29,6 +29,16 @@ function Customizer({ onAddToCart, defaultPrefs }) {
   const [foil, setFoil] = useState(defaultPrefs?.foil || 'gold'); // gold | blind
   const [isStamped, setIsStamped] = useState(!!defaultPrefs?.initials);
   const [isZoomed, setIsZoomed] = useState(false);
+
+  useEffect(() => {
+    if (defaultPrefs) {
+      setMonogramInput(defaultPrefs.initials || '');
+      setAppliedMonogram(defaultPrefs.initials || '');
+      setStampLocation(defaultPrefs.position || 'strap');
+      setFoil(defaultPrefs.foil || 'gold');
+      setIsStamped(!!defaultPrefs.initials);
+    }
+  }, [defaultPrefs]);
 
   const price = 2950;
 
@@ -49,6 +59,9 @@ function Customizer({ onAddToCart, defaultPrefs }) {
     if (val) {
       setAppliedMonogram(val);
       setIsStamped(true);
+      if (onUpdatePrefs) {
+        onUpdatePrefs({ initials: val, foil, position: stampLocation });
+      }
       
       // Stamp Animation
       if (window.gsap) {
@@ -106,6 +119,9 @@ function Customizer({ onAddToCart, defaultPrefs }) {
     } else {
       setAppliedMonogram('');
       setIsStamped(false);
+      if (onUpdatePrefs) {
+        onUpdatePrefs({ initials: '', foil, position: stampLocation });
+      }
     }
   };
 
@@ -277,6 +293,9 @@ function Customizer({ onAddToCart, defaultPrefs }) {
                     key={key}
                     onClick={() => {
                       setStampLocation(key);
+                      if (onUpdatePrefs) {
+                        onUpdatePrefs({ initials: appliedMonogram, foil, position: key });
+                      }
                       // Visual flash on relocation
                       if (window.gsap && appliedMonogram) {
                         window.gsap.fromTo('.monogram-text-render', 
@@ -308,8 +327,13 @@ function Customizer({ onAddToCart, defaultPrefs }) {
             <div className="control-group">
               <span className="control-label">Stamping Foil</span>
               <div style={{ display: 'flex', gap: '16px' }} className="font-sans">
-                <button 
-                  onClick={() => setFoil('gold')}
+                 <button 
+                  onClick={() => {
+                    setFoil('gold');
+                    if (onUpdatePrefs) {
+                      onUpdatePrefs({ initials: appliedMonogram, foil: 'gold', position: stampLocation });
+                    }
+                  }}
                   style={{
                     border: foil === 'gold' ? '1px solid #B97C52' : '1px solid #E5E2DE',
                     padding: '8px 16px',
@@ -326,7 +350,12 @@ function Customizer({ onAddToCart, defaultPrefs }) {
                   Gold Foil
                 </button>
                 <button 
-                  onClick={() => setFoil('blind')}
+                  onClick={() => {
+                    setFoil('blind');
+                    if (onUpdatePrefs) {
+                      onUpdatePrefs({ initials: appliedMonogram, foil: 'blind', position: stampLocation });
+                    }
+                  }}
                   style={{
                     border: foil === 'blind' ? '1px solid #1C1B1A' : '1px solid #E5E2DE',
                     padding: '8px 16px',

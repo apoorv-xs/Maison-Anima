@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Customizer from '../components/Customizer';
 
-function Customization({ onAddToCart, monogramPrefs }) {
+function Customization({ onAddToCart, monogramPrefs, onUpdatePrefs }) {
   useEffect(() => {
     if (window.gsap) {
       const gsap = window.gsap;
@@ -46,7 +46,7 @@ function Customization({ onAddToCart, monogramPrefs }) {
 
   return (
     <div>
-      <Customizer onAddToCart={onAddToCart} defaultPrefs={monogramPrefs} />
+      <Customizer onAddToCart={onAddToCart} defaultPrefs={monogramPrefs} onUpdatePrefs={onUpdatePrefs} />
     </div>
   );
 }

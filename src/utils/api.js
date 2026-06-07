@@ -3,16 +3,16 @@
 const PRODUCTS_DATA = [
   {
     id: '1',
-    name: 'The Horsebit Chain Pochette',
-    price: 2890,
+    name: 'Classic Silk Bandana',
+    price: 495,
     image: '/assets/chain_pochette.png',
-    meta: 'Signature Line',
-    category: 'Bags',
-    description: 'Every stitch preserves a century of elite craftsmanship. Hand-curated selection honoring the equestrian heritage foundations.'
+    meta: 'Equestrian Silk',
+    category: 'Accessories',
+    description: 'Elite craftsmanship in pure silk, screen-printed with historic equestrian motifs.'
   },
   {
     id: '2',
-    name: 'Equestrian Leather Riding Boot',
+    name: 'Equestrian Riding Boots',
     price: 1450,
     image: '/assets/riding_boot.png',
     meta: 'Vintage Archive',
@@ -39,10 +39,10 @@ const PRODUCTS_DATA = [
   },
   {
     id: '5',
-    name: 'GG Heritage Saddle Belt',
-    price: 620,
+    name: 'Leather Harness Waist Belt',
+    price: 690,
     image: '/assets/saddle_belt.png',
-    meta: 'Accessories',
+    meta: 'Archival Collection',
     category: 'Accessories',
     description: 'Refined leather waist belt detailed with equestrian buckle attachments. Hand-curated signature accent for tailored looks.'
   }

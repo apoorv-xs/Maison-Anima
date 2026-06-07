@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { MaisonCMS } from '../utils/api';
+import ProductModal from '../components/ProductModal';
 
 const lookbookEntries = [
   {
@@ -7,8 +9,8 @@ const lookbookEntries = [
     image: '/assets/hero_campaign.png',
     tag: 'Autumn Runway',
     hotspots: [
-      { id: 'hs-1', name: 'Classic Silk Bandana', price: 495, top: '35%', left: '48%', meta: 'Equestrian Silk', image: '/assets/chain_pochette.png' },
-      { id: 'hs-2', name: 'Leather Harness Waist Belt', price: 690, top: '65%', left: '52%', meta: 'Archival Collection', image: '/assets/saddle_belt.png' }
+      { productId: '1', top: '35%', left: '48%' }, // The Horsebit Chain Pochette
+      { productId: '5', top: '65%', left: '52%' }  // GG Heritage Saddle Belt
     ]
   },
   {
@@ -17,17 +19,42 @@ const lookbookEntries = [
     image: '/assets/riding_boot.png',
     tag: 'Exquisite Leather Goods',
     hotspots: [
-      { id: 'hs-3', name: 'Equestrian Riding Boots', price: 1450, top: '50%', left: '42%', meta: 'Vintage Archive', image: '/assets/riding_boot.png' }
+      { productId: '2', top: '50%', left: '42%' }  // Equestrian Leather Riding Boot
     ]
   }
 ];
 
 function Journal({ onAddToCart }) {
-  const [activeHotspot, setActiveHotspot] = useState(null);
+  const [activeProductId, setActiveProductId] = useState(null);
+  const [productsMap, setProductsMap] = useState({});
+  const [loadingProduct, setLoadingProduct] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const handleAddHotspotItem = (item) => {
-    onAddToCart(item.id, item.name, item.price, item.image, item.meta);
-    alert(`${item.name} has been added to your shopping bag.`);
+  const handleHotspotClick = async (productId) => {
+    if (activeProductId === productId) {
+      setActiveProductId(null);
+      return;
+    }
+    
+    setActiveProductId(productId);
+    
+    // Dynamically retrieve product details from CMS if not already loaded
+    if (!productsMap[productId]) {
+      setLoadingProduct(true);
+      try {
+        const product = await MaisonCMS.fetchProductById(productId);
+        setProductsMap((prev) => ({ ...prev, [productId]: product }));
+      } catch (err) {
+        console.error("Failed to load hotspot product from Maison registry:", err);
+      } finally {
+        setLoadingProduct(false);
+      }
+    }
+  };
+
+  const handleAddHotspotItem = (product) => {
+    onAddToCart(product.id, product.name, product.price, product.image, product.meta);
+    alert(`${product.name} has been added to your shopping bag.`);
   };
 
   // 3D Parallax Mouse Handlers
@@ -37,16 +64,13 @@ function Journal({ onAddToCart }) {
     const x = (e.clientX - box.left) / box.width - 0.5; // -0.5 to 0.5
     const y = (e.clientY - box.top) / box.height - 0.5; // -0.5 to 0.5
     
-    // Tilt the card frame
     card.style.transform = `perspective(1000px) rotateX(${-y * 12}deg) rotateY(${x * 12}deg) scale(1.02)`;
     
-    // Slide the background image slightly inside the frame
     const img = card.querySelector('.parallax-img');
     if (img) {
       img.style.transform = `translate(${x * 10}px, ${y * 10}px) scale(1.06)`;
     }
 
-    // Slide the sibling text card in the opposite direction
     const row = card.parentElement;
     if (row) {
       const textCard = row.querySelector('.parallax-text-card');
@@ -58,16 +82,13 @@ function Journal({ onAddToCart }) {
 
   const handleMouseLeave = (e) => {
     const card = e.currentTarget;
-    // Reset card tilt
     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
     
-    // Reset image slide
     const img = card.querySelector('.parallax-img');
     if (img) {
       img.style.transform = 'translate(0px, 0px) scale(1)';
     }
     
-    // Reset text card slide
     const row = card.parentElement;
     if (row) {
       const textCard = row.querySelector('.parallax-text-card');
@@ -125,7 +146,7 @@ function Journal({ onAddToCart }) {
                 {/* Hotspots popped out in 3D */}
                 {entry.hotspots.map((hs) => (
                   <div 
-                    key={hs.id}
+                    key={hs.productId}
                     style={{
                       position: 'absolute',
                       top: hs.top,
@@ -135,7 +156,7 @@ function Journal({ onAddToCart }) {
                     }}
                   >
                     <button 
-                      onClick={() => setActiveHotspot(activeHotspot?.id === hs.id ? null : hs)}
+                      onClick={() => handleHotspotClick(hs.productId)}
                       style={{
                         width: '28px',
                         height: '28px',
@@ -184,44 +205,81 @@ function Journal({ onAddToCart }) {
                 </p>
                 
                 {/* Selected Hotspot Card */}
-                {activeHotspot && entry.hotspots.some(h => h.id === activeHotspot.id) ? (
-                  <div className="font-sans" style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid #E5E2DE',
-                    borderRadius: '8px',
-                    padding: '24px',
-                    boxShadow: '0 10px 30px rgba(28,27,26,0.03)',
-                    animation: 'slideInCard 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-                  }}>
-                    <span style={{ fontSize: '0.7rem', color: '#B97C52', textTransform: 'uppercase', letterSpacing: '0.15em', display: 'block', marginBottom: '8px' }}>
-                      Featured Item
-                    </span>
-                    <h4 style={{ fontSize: '1.1rem', fontWeight: 500, color: '#1C1B1A', marginBottom: '6px' }}>
-                      {activeHotspot.name}
-                    </h4>
-                    <span style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '16px' }}>
-                      ${activeHotspot.price.toLocaleString()}
-                    </span>
-                    <button 
-                      onClick={() => handleAddHotspotItem(activeHotspot)}
-                      style={{
-                        backgroundColor: '#1C1B1A',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        padding: '10px 20px',
-                        borderRadius: '20px',
-                        fontSize: '0.75rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.15em',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s'
-                      }}
-                      onMouseOver={(e) => e.target.style.backgroundColor = '#B97C52'}
-                      onMouseOut={(e) => e.target.style.backgroundColor = '#1C1B1A'}
-                    >
-                      Shop Item
-                    </button>
-                  </div>
+                {activeProductId && entry.hotspots.some(h => h.productId === activeProductId) ? (
+                  loadingProduct ? (
+                    <div style={{ border: '1px dashed #E5E2DE', borderRadius: '8px', padding: '30px', textAlign: 'center', color: '#6A6764', fontSize: '0.85rem' }}>
+                      <div style={{ display: 'inline-block', width: '20px', height: '20px', borderRadius: '50%', border: '2px solid #B97C52', borderTopColor: 'transparent', animation: 'spinLoad 0.8s infinite linear', marginBottom: '8px' }}></div>
+                      <p>Querying Maison registry...</p>
+                    </div>
+                  ) : productsMap[activeProductId] ? (
+                    <div className="font-sans" style={{
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #E5E2DE',
+                      borderRadius: '8px',
+                      padding: '24px',
+                      boxShadow: '0 10px 30px rgba(28,27,26,0.03)',
+                      animation: 'slideInCard 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+                    }}>
+                      <span style={{ fontSize: '0.7rem', color: '#B97C52', textTransform: 'uppercase', letterSpacing: '0.15em', display: 'block', marginBottom: '8px' }}>
+                        Featured Catalog Piece
+                      </span>
+                      <h4 style={{ fontSize: '1.15rem', fontWeight: 500, color: '#1C1B1A', marginBottom: '6px' }}>
+                        {productsMap[activeProductId].name}
+                      </h4>
+                      <span style={{ display: 'block', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6A6764', marginBottom: '10px' }}>
+                        {productsMap[activeProductId].meta}
+                      </span>
+                      <p style={{ fontSize: '0.82rem', color: '#6A6764', lineHeight: '1.6', marginBottom: '20px' }}>
+                        {productsMap[activeProductId].description}
+                      </p>
+                      
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px dashed #E5E2DE', paddingTop: '16px' }}>
+                        <span style={{ fontSize: '1.15rem', fontWeight: 500 }}>
+                          ${productsMap[activeProductId].price.toLocaleString()}
+                        </span>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                          <button 
+                            onClick={() => setSelectedProduct(productsMap[activeProductId])}
+                            style={{
+                              backgroundColor: 'transparent',
+                              color: '#1C1B1A',
+                              border: '1px solid #1C1B1A',
+                              padding: '10px 20px',
+                              borderRadius: '20px',
+                              fontSize: '0.7rem',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.15em',
+                              cursor: 'pointer',
+                              transition: 'all 0.3s'
+                            }}
+                            onMouseOver={(e) => { e.target.style.backgroundColor = '#1C1B1A'; e.target.style.color = '#FFFFFF'; }}
+                            onMouseOut={(e) => { e.target.style.backgroundColor = 'transparent'; e.target.style.color = '#1C1B1A'; }}
+                          >
+                            Quick View
+                          </button>
+                          <button 
+                            onClick={() => handleAddHotspotItem(productsMap[activeProductId])}
+                            style={{
+                              backgroundColor: '#1C1B1A',
+                              color: '#FFFFFF',
+                              border: 'none',
+                              padding: '10px 20px',
+                              borderRadius: '20px',
+                              fontSize: '0.7rem',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.15em',
+                              cursor: 'pointer',
+                              transition: 'all 0.3s'
+                            }}
+                            onMouseOver={(e) => e.target.style.backgroundColor = '#B97C52'}
+                            onMouseOut={(e) => e.target.style.backgroundColor = '#1C1B1A'}
+                          >
+                            Shop Item
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null
                 ) : (
                   <div style={{
                     border: '1px dashed #E5E2DE',
@@ -241,7 +299,7 @@ function Journal({ onAddToCart }) {
         </div>
       </div>
       
-      {/* Styles for Pin Pulse Animation */}
+      {/* Styles for Pin Pulse & Spinner Animation */}
       <style>{`
         @keyframes pulsePin {
           0% { transform: scale(1) translateZ(30px); box-shadow: 0 0 0 0 rgba(185, 124, 82, 0.5); }
@@ -252,7 +310,19 @@ function Journal({ onAddToCart }) {
           from { opacity: 0; transform: translateY(15px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes spinLoad {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
       `}</style>
+      
+      {selectedProduct && (
+        <ProductModal 
+          product={selectedProduct} 
+          onClose={() => setSelectedProduct(null)} 
+          onAddToCart={onAddToCart} 
+        />
+      )}
     </section>
   );
 }

@@ -67,7 +67,7 @@ function RouteTransition({
       <Routes location={displayLocation}>
         <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
         <Route path="/collections" element={<Collections onAddToCart={handleAddToCart} />} />
-        <Route path="/customizer" element={<Customization onAddToCart={handleAddToCart} monogramPrefs={monogramPrefs} />} />
+        <Route path="/customizer" element={<Customization onAddToCart={handleAddToCart} monogramPrefs={monogramPrefs} onUpdatePrefs={handleUpdatePrefs} />} />
         <Route path="/craft" element={<Craft />} />
         <Route path="/registry/:token" element={<Registry onAddToCart={handleAddToCart} />} />
         <Route path="/journal" element={<Journal onAddToCart={handleAddToCart} />} />
@@ -133,7 +133,15 @@ function App() {
   const [monogramPrefs, setMonogramPrefs] = useState(() => {
     try {
       const saved = localStorage.getItem('maison_monogram_prefs');
-      return saved ? JSON.parse(saved) : { initials: '', foil: 'gold', position: 'strap' };
+      if (saved) return JSON.parse(saved);
+      const userSaved = localStorage.getItem('maison_current_user');
+      if (userSaved) {
+        const user = JSON.parse(userSaved);
+        if (user && user.avatarInitials) {
+          return { initials: user.avatarInitials, foil: 'gold', position: 'strap' };
+        }
+      }
+      return { initials: '', foil: 'gold', position: 'strap' };
     } catch {
       return { initials: '', foil: 'gold', position: 'strap' };
     }
@@ -156,6 +164,15 @@ function App() {
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);
     localStorage.setItem('maison_current_user', JSON.stringify(user));
+    
+    // Auto-prepopulate monogram if currently empty
+    const savedPrefsStr = localStorage.getItem('maison_monogram_prefs');
+    const savedPrefs = savedPrefsStr ? JSON.parse(savedPrefsStr) : null;
+    if ((!savedPrefs || !savedPrefs.initials) && user.avatarInitials) {
+      const newPrefs = { initials: user.avatarInitials, foil: 'gold', position: 'strap' };
+      setMonogramPrefs(newPrefs);
+      localStorage.setItem('maison_monogram_prefs', JSON.stringify(newPrefs));
+    }
   };
 
   const handleLogout = () => {
