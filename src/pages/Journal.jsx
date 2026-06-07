@@ -30,6 +30,53 @@ function Journal({ onAddToCart }) {
     alert(`${item.name} has been added to your shopping bag.`);
   };
 
+  // 3D Parallax Mouse Handlers
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const box = card.getBoundingClientRect();
+    const x = (e.clientX - box.left) / box.width - 0.5; // -0.5 to 0.5
+    const y = (e.clientY - box.top) / box.height - 0.5; // -0.5 to 0.5
+    
+    // Tilt the card frame
+    card.style.transform = `perspective(1000px) rotateX(${-y * 12}deg) rotateY(${x * 12}deg) scale(1.02)`;
+    
+    // Slide the background image slightly inside the frame
+    const img = card.querySelector('.parallax-img');
+    if (img) {
+      img.style.transform = `translate(${x * 10}px, ${y * 10}px) scale(1.06)`;
+    }
+
+    // Slide the sibling text card in the opposite direction
+    const row = card.parentElement;
+    if (row) {
+      const textCard = row.querySelector('.parallax-text-card');
+      if (textCard) {
+        textCard.style.transform = `translate(${-x * 18}px, ${-y * 18}px)`;
+      }
+    }
+  };
+
+  const handleMouseLeave = (e) => {
+    const card = e.currentTarget;
+    // Reset card tilt
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    
+    // Reset image slide
+    const img = card.querySelector('.parallax-img');
+    if (img) {
+      img.style.transform = 'translate(0px, 0px) scale(1)';
+    }
+    
+    // Reset text card slide
+    const row = card.parentElement;
+    if (row) {
+      const textCard = row.querySelector('.parallax-text-card');
+      if (textCard) {
+        textCard.style.transform = 'translate(0px, 0px)';
+      }
+    }
+  };
+
   return (
     <section className="editorial-section" style={{ minHeight: '100vh', backgroundColor: '#FDFBF7' }}>
       <div className="section-container" style={{ maxWidth: '1200px' }}>
@@ -43,15 +90,39 @@ function Journal({ onAddToCart }) {
           {lookbookEntries.map((entry) => (
             <div key={entry.id} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '60px', alignItems: 'center' }}>
               
-              {/* Left Side: Interactive Hotspot Image */}
-              <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#F6F3EF' }}>
-                <img 
-                  src={entry.image} 
-                  alt={entry.title} 
-                  style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '600px', objectFit: 'cover' }} 
-                />
+              {/* Left Side: Interactive Parallax Hotspot Frame */}
+              <div 
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                style={{ 
+                  position: 'relative', 
+                  borderRadius: '12px', 
+                  overflow: 'hidden', 
+                  backgroundColor: '#F6F3EF',
+                  transformStyle: 'preserve-3d',
+                  transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                  boxShadow: '0 20px 45px rgba(28, 27, 26, 0.03)',
+                  cursor: 'crosshair'
+                }}
+              >
+                {/* Background Image inside frame */}
+                <div style={{ overflow: 'hidden', width: '100%', height: 'auto', maxHeight: '600px' }}>
+                  <img 
+                    src={entry.image} 
+                    alt={entry.title} 
+                    className="parallax-img"
+                    style={{ 
+                      width: '100%', 
+                      height: 'auto', 
+                      display: 'block', 
+                      maxHeight: '600px', 
+                      objectFit: 'cover',
+                      transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
+                    }} 
+                  />
+                </div>
                 
-                {/* Hotspots */}
+                {/* Hotspots popped out in 3D */}
                 {entry.hotspots.map((hs) => (
                   <div 
                     key={hs.id}
@@ -59,7 +130,7 @@ function Journal({ onAddToCart }) {
                       position: 'absolute',
                       top: hs.top,
                       left: hs.left,
-                      transform: 'translate(-50%, -50%)',
+                      transform: 'translate(-50%, -50%) translateZ(30px)',
                       zIndex: 20
                     }}
                   >
@@ -71,7 +142,7 @@ function Journal({ onAddToCart }) {
                         borderRadius: '50%',
                         backgroundColor: '#B97C52',
                         border: '2px solid #FFFFFF',
-                        boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -80,8 +151,11 @@ function Journal({ onAddToCart }) {
                         fontWeight: 'bold',
                         cursor: 'pointer',
                         animation: 'pulsePin 2s infinite',
-                        outline: 'none'
+                        outline: 'none',
+                        transition: 'transform 0.2s'
                       }}
+                      onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15) translateZ(40px)'}
+                      onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1) translateZ(30px)'}
                     >
                       +
                     </button>
@@ -89,8 +163,16 @@ function Journal({ onAddToCart }) {
                 ))}
               </div>
               
-              {/* Right Side: Editorial Text & Hotspot Details */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+              {/* Right Side: Editorial Text & Hotspot Details (Offsets in Parallax) */}
+              <div 
+                className="parallax-text-card"
+                style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '30px',
+                  transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              >
                 <span className="font-sans text-xs uppercase tracking-widest text-muted" style={{ fontSize: '0.75rem', letterSpacing: '0.2em' }}>
                   {entry.tag}
                 </span>
@@ -162,9 +244,9 @@ function Journal({ onAddToCart }) {
       {/* Styles for Pin Pulse Animation */}
       <style>{`
         @keyframes pulsePin {
-          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(185, 124, 82, 0.5); }
-          70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(185, 124, 82, 0); }
-          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(185, 124, 82, 0); }
+          0% { transform: scale(1) translateZ(30px); box-shadow: 0 0 0 0 rgba(185, 124, 82, 0.5); }
+          70% { transform: scale(1.1) translateZ(30px); box-shadow: 0 0 0 10px rgba(185, 124, 82, 0); }
+          100% { transform: scale(1) translateZ(30px); box-shadow: 0 0 0 0 rgba(185, 124, 82, 0); }
         }
         @keyframes slideInCard {
           from { opacity: 0; transform: translateY(15px); }

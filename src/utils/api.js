@@ -83,7 +83,7 @@ export const MaisonCloudDB = {
    * Simulates syncing shopping bag state to a cloud database (MongoDB/PostgreSQL).
    * Generates a unique sync token and persists it to a simulated remote database map in localStorage.
    */
-  syncCart: async (cart) => {
+  syncCart: async (cart, giftNote = '', giftWrapping = 'signature') => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const syncToken = `ANIMA-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
@@ -92,6 +92,8 @@ export const MaisonCloudDB = {
           const remoteDB = JSON.parse(localStorage.getItem('maison_cloud_db') || '{}');
           remoteDB[syncToken] = {
             cart,
+            giftNote,
+            giftWrapping,
             syncedAt: new Date().toISOString()
           };
           localStorage.setItem('maison_cloud_db', JSON.stringify(remoteDB));
