@@ -7,8 +7,8 @@ const lookbookEntries = [
     image: '/assets/hero_campaign.png',
     tag: 'Autumn Runway',
     hotspots: [
-      { id: 'hs-1', name: 'Classic Silk Bandana', price: 495, top: '35%', left: '48%', meta: 'Equestrian Silk' },
-      { id: 'hs-2', name: 'Leather Harness Waist Belt', price: 690, top: '65%', left: '52%', meta: 'Archival Collection' }
+      { id: 'hs-1', name: 'Classic Silk Bandana', price: 495, top: '35%', left: '48%', meta: 'Equestrian Silk', image: '/assets/chain_pochette.png' },
+      { id: 'hs-2', name: 'Leather Harness Waist Belt', price: 690, top: '65%', left: '52%', meta: 'Archival Collection', image: '/assets/saddle_belt.png' }
     ]
   },
   {
@@ -17,7 +17,7 @@ const lookbookEntries = [
     image: '/assets/riding_boot.png',
     tag: 'Exquisite Leather Goods',
     hotspots: [
-      { id: 'hs-3', name: 'Equestrian Riding Boots', price: 1450, top: '50%', left: '42%', meta: 'Vintage Archive' }
+      { id: 'hs-3', name: 'Equestrian Riding Boots', price: 1450, top: '50%', left: '42%', meta: 'Vintage Archive', image: '/assets/riding_boot.png' }
     ]
   }
 ];
@@ -26,7 +26,7 @@ function Journal({ onAddToCart }) {
   const [activeHotspot, setActiveHotspot] = useState(null);
 
   const handleAddHotspotItem = (item) => {
-    onAddToCart(item.id, item.name, item.price, '/assets/jackie_bag.png', item.meta);
+    onAddToCart(item.id, item.name, item.price, item.image, item.meta);
     alert(`${item.name} has been added to your shopping bag.`);
   };
 
