@@ -79,18 +79,29 @@ function Registry({ onAddToCart }) {
     navigate('/cart');
   };
 
+  const sanitizeInput = (text) => {
+    return text
+      .replace(/<[^>]*>/g, '')
+      .replace(/javascript:/gi, '')
+      .replace(/on\w+\s*=/gi, '');
+  };
+
   const handleAddComment = (e) => {
     e.preventDefault();
-    if (!guestName || !guestComment) return;
+    if (!guestName.trim() || !guestComment.trim()) return;
     
     setSubmittingComment(true);
+    
+    const cleanName = sanitizeInput(guestName);
+    const cleanComment = sanitizeInput(guestComment);
+    const cleanInitials = sanitizeInput(guestInitials);
     
     setTimeout(() => {
       const newComment = {
         id: Date.now(),
-        name: guestName,
-        initials: (guestInitials || guestName.substring(0, 2)).toUpperCase(),
-        text: guestComment,
+        name: cleanName,
+        initials: (cleanInitials || cleanName.substring(0, 2)).toUpperCase().substring(0, 4),
+        text: cleanComment,
         date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
       };
 

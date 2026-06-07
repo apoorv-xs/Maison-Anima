@@ -36,12 +36,48 @@ function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity, currentUser, 
     }
   };
 
+  const sanitizeInput = (text) => {
+    return text
+      .replace(/<[^>]*>/g, '')
+      .replace(/javascript:/gi, '')
+      .replace(/on\w+\s*=/gi, '');
+  };
+
+  const validateCard = (cardNum) => {
+    const cleanNum = cardNum.replace(/[\s-]/g, '');
+    if (!/^\d{13,19}$/.test(cleanNum)) return false;
+    let sum = 0;
+    let shouldDouble = false;
+    for (let i = cleanNum.length - 1; i >= 0; i--) {
+      let digit = parseInt(cleanNum.charAt(i));
+      if (shouldDouble) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+      shouldDouble = !shouldDouble;
+    }
+    return (sum % 10) === 0;
+  };
+
   const handleCheckoutSubmit = (e) => {
     e.preventDefault();
     if (!name || !address) {
       alert("Please fill in shipping name and address details.");
       return;
     }
+    
+    // E-commerce card validation (Luhn Algorithm)
+    if (!validateCard(card)) {
+      alert("Security Validation Failed: Please enter a valid 13-19 digit card number conforming to Luhn check rules.");
+      return;
+    }
+
+    // Mask sensitive details to prevent telemetry leakage (PCI-DSS compliance)
+    const cardDigits = card.replace(/[\s-]/g, '');
+    const maskedCard = cardDigits.slice(-4).padStart(16, '*');
+    console.log(`[Maison Security Audit] Secure payment processing for client: ${name.toUpperCase()} (Card: ${maskedCard})`);
+
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
@@ -219,7 +255,7 @@ function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity, currentUser, 
                         placeholder="Write your personal message here (e.g., 'Happy Anniversary. With love, A.')" 
                         maxLength={180}
                         value={giftNote}
-                        onChange={(e) => setGiftNote(e.target.value)}
+                        onChange={(e) => setGiftNote(sanitizeInput(e.target.value))}
                         style={{
                           width: '100%',
                           height: '80px',
@@ -537,7 +573,9 @@ function Cart({ cart, onRemoveItem, onClearCart, onUpdateQuantity, currentUser, 
                     required 
                     placeholder="•••• •••• •••• 1921" 
                     value={card} 
-                    onChange={(e) => setCard(e.target.value)}
+                    onChange={(e) => setCard(e.target.value.replace(/[^0-9\s-]/g, ''))}
+                    maxLength={19}
+                    autoComplete="off"
                     style={{ border: '1px solid #E5E2DE', borderRadius: '20px', padding: '10px 16px', fontSize: '0.85rem', outline: 'none' }}
                   />
                 </div>

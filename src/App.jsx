@@ -234,6 +234,36 @@ function App() {
     });
   };
 
+  // Client Inactivity Auto-Logout Timer (5 minutes)
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const INACTIVITY_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+    let timeoutId;
+
+    const resetTimer = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        handleLogout();
+        alert("Session Expired: You have been automatically logged out of the Private Salon due to inactivity.");
+        // Redirect to login using standard hash router or browser navigation
+        window.location.href = '/login';
+      }, INACTIVITY_TIMEOUT);
+    };
+
+    // Events to monitor activity
+    const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+    events.forEach(event => window.addEventListener(event, resetTimer));
+
+    // Initialize timer
+    resetTimer();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      events.forEach(event => window.removeEventListener(event, resetTimer));
+    };
+  }, [currentUser]);
+
   // Scroll listener for header
   useEffect(() => {
     const handleScroll = () => {
