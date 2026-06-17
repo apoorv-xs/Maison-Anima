@@ -334,10 +334,14 @@ function Profile() {
                         </span>
                       </div>
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           const url = `${window.location.origin}/registry/${t.token}`;
-                          navigator.clipboard.writeText(url);
-                          alert(`Registry share link copied to clipboard: ${url}`);
+                          try {
+                            await navigator.clipboard.writeText(url);
+                            alert(`Registry share link copied to clipboard: ${url}`);
+                          } catch (e) {
+                            window.prompt('Copy this link:', url);
+                          }
                         }}
                         style={{
                           border: '1px solid #1C1B1A',

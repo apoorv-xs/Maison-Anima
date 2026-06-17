@@ -54,9 +54,14 @@ function CloudSync({ giftNote, giftWrapping }) {
             </div>
 
             <button
-              onClick={() => {
+              onClick={async () => {
                 const url = `${window.location.origin}/registry/${syncToken}`;
-                navigator.clipboard.writeText(url);
+                try {
+                  await navigator.clipboard.writeText(url);
+                } catch (e) {
+                  // Fallback: select text for manual copy
+                  window.prompt('Copy this link:', url);
+                }
                 setLinkCopied(true);
                 setTimeout(() => setLinkCopied(false), 2000);
               }}
