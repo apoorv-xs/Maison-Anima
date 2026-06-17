@@ -3,7 +3,7 @@ import React from 'react';
 function Hero() {
   return (
     <section id="hero" className="hero-section">
-      <div className="hero-parallax-bg" style={{ backgroundImage: "url('/assets/hero_campaign.png')" }}></div>
+      <div className="hero-parallax-bg" style={{ backgroundImage: "url('/assets/hero_campaign.webp')" }}></div>
       <div className="hero-overlay"></div>
       <div className="hero-content">
         <h5 className="hero-subtitle font-sans" id="heroSubtitle">Autumn Collection</h5>

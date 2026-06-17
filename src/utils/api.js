@@ -11,7 +11,7 @@ const PRODUCTS_DATA = [
     id: '1',
     name: 'Classic Silk Bandana',
     price: 495,
-    image: '/assets/chain_pochette.png',
+    image: '/assets/chain_pochette.webp',
     meta: 'Equestrian Silk',
     category: 'Accessories',
     description: 'Elite craftsmanship in pure silk, screen-printed with historic equestrian motifs.'
@@ -20,7 +20,7 @@ const PRODUCTS_DATA = [
     id: '2',
     name: 'Equestrian Riding Boots',
     price: 1450,
-    image: '/assets/riding_boot.png',
+    image: '/assets/riding_boot.webp',
     meta: 'Vintage Archive',
     category: 'Footwear',
     description: 'Premium refined leather designed with timeless lines, bringing historic equestrian boots into modern luxury wear.'
@@ -29,7 +29,7 @@ const PRODUCTS_DATA = [
     id: '3',
     name: 'Bamboo Signature Tote',
     price: 3900,
-    image: '/assets/bamboo_tote.png',
+    image: '/assets/bamboo_tote.webp',
     meta: 'Maison Icons',
     category: 'Bags',
     description: 'Iconic curved bamboo handle paired with hand-grained Siena leather. An avant-garde silhouette crafted in Florence.'
@@ -38,7 +38,7 @@ const PRODUCTS_DATA = [
     id: '4',
     name: 'Classic Horsebit Loafer',
     price: 890,
-    image: '/assets/horsebit_loafer.png',
+    image: '/assets/horsebit_loafer.webp',
     meta: 'Vintage Archive',
     category: 'Footwear',
     description: 'The definitive leather loafer detailed with the double-ring equestrian horsebit. Crafted in soft-grained black calfskin.'
@@ -47,7 +47,7 @@ const PRODUCTS_DATA = [
     id: '5',
     name: 'Leather Harness Waist Belt',
     price: 690,
-    image: '/assets/saddle_belt.png',
+    image: '/assets/saddle_belt.webp',
     meta: 'Archival Collection',
     category: 'Accessories',
     description: 'Refined leather waist belt detailed with equestrian buckle attachments. Hand-curated signature accent for tailored looks.'

@@ -132,7 +132,7 @@ function Customizer() {
   const handleAddCustomToBag = () => {
     const name = "The Custom Jackie Bag";
     const meta = `Finish: ${colorName} • Foil: ${foil === 'gold' ? 'Gold Embossed' : 'Blind Debossed'} • Position: ${STAMP_LOCATIONS[stampLocation].label}`;
-    addToCart('custom-jackie', name, price, `/assets/jackie_${color}.png`, meta, appliedMonogram);
+    addToCart('custom-jackie', name, price, `/assets/jackie_${color}.webp`, meta, appliedMonogram);
   };
 
   return (
@@ -190,10 +190,10 @@ function Customizer() {
                 {/* Stack of Bag Colors */}
                 <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {[
-                    { key: 'original', src: '/assets/jackie_tan.png' },
-                    { key: 'rosso', src: '/assets/jackie_rosso.png' },
-                    { key: 'smeraldo', src: '/assets/jackie_smeraldo.png' },
-                    { key: 'nero', src: '/assets/jackie_nero.png' }
+                    { key: 'original', src: '/assets/jackie_tan.webp' },
+                    { key: 'rosso', src: '/assets/jackie_rosso.webp' },
+                    { key: 'smeraldo', src: '/assets/jackie_smeraldo.webp' },
+                    { key: 'nero', src: '/assets/jackie_nero.webp' }
                   ].map((variant) => (
                     <img
                       key={variant.key}

@@ -105,7 +105,7 @@ function Editorial() {
                 }}
               >
                 <div className="card-image-wrapper">
-                  <img src={product.image} alt={product.name} className="product-image" />
+                  <img src={product.image} alt={product.name} className="product-image" loading="lazy" />
                   <button 
                     className="quick-add-btn" 
                     onClick={(e) => {

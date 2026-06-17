@@ -7,7 +7,7 @@ const lookbookEntries = [
   {
     id: 1,
     title: 'Autumn Campaign Look 04',
-    image: '/assets/hero_campaign.png',
+    image: '/assets/hero_campaign.webp',
     tag: 'Autumn Runway',
     hotspots: [
       { productId: '1', top: '35%', left: '48%' }, // The Horsebit Chain Pochette
@@ -17,7 +17,7 @@ const lookbookEntries = [
   {
     id: 2,
     title: 'The Equestrian Signature Detail',
-    image: '/assets/riding_boot.png',
+    image: '/assets/riding_boot.webp',
     tag: 'Exquisite Leather Goods',
     hotspots: [
       { productId: '2', top: '50%', left: '42%' }  // Equestrian Leather Riding Boot
@@ -134,6 +134,7 @@ function Journal() {
                     src={entry.image} 
                     alt={entry.title} 
                     className="parallax-img"
+                    loading="lazy"
                     style={{ 
                       width: '100%', 
                       height: 'auto', 
