@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react';
 import Customizer from '../components/Customizer';
+import { gsap, ScrollTrigger } from '../utils/gsap';
 
-function Customization({ onAddToCart, monogramPrefs, onUpdatePrefs }) {
+function Customization() {
   useEffect(() => {
-    if (window.gsap) {
-      const gsap = window.gsap;
-      const ScrollTrigger = window.ScrollTrigger;
-      gsap.registerPlugin(ScrollTrigger);
+    if (gsap) {
 
-      // Scroll Reveal for Customizer Section Elements
       gsap.fromTo('.customizer-preview',
           { opacity: 0, x: -60 },
           {
@@ -36,7 +33,6 @@ function Customization({ onAddToCart, monogramPrefs, onUpdatePrefs }) {
           }
       );
     } else {
-      // Fallback
       const preview = document.querySelector('.customizer-preview');
       const controls = document.querySelector('.customizer-controls');
       if (preview) { preview.style.opacity = '1'; preview.style.transform = 'none'; }
@@ -46,7 +42,7 @@ function Customization({ onAddToCart, monogramPrefs, onUpdatePrefs }) {
 
   return (
     <div>
-      <Customizer onAddToCart={onAddToCart} defaultPrefs={monogramPrefs} onUpdatePrefs={onUpdatePrefs} />
+      <Customizer />
     </div>
   );
 }

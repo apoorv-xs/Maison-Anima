@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ProductModal from './ProductModal';
 import { MaisonCMS } from '../utils/api';
+import { useCart } from '../context/CartContext';
 
-function Editorial({ onAddToCart }) {
+function Editorial() {
+  const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -108,7 +110,7 @@ function Editorial({ onAddToCart }) {
                     className="quick-add-btn" 
                     onClick={(e) => {
                       e.stopPropagation();
-                      onAddToCart(product.id, product.name, product.price, product.image, 'Classic Edition');
+                      addToCart(product.id, product.name, product.price, product.image, 'Classic Edition');
                     }}
                   >
                     Add to Bag
@@ -129,91 +131,12 @@ function Editorial({ onAddToCart }) {
       </div>
 
       {selectedProduct && (
-        <ProductModal 
-          product={selectedProduct} 
-          onClose={() => setSelectedProduct(null)} 
-          onAddToCart={onAddToCart} 
+        <ProductModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
         />
       )}
 
-      <style>{`
-        @keyframes cardEnter {
-          from { opacity: 0; transform: translateY(15px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        .skeleton-card {
-          border: 1px solid #E5E2DE;
-          border-radius: 12px;
-          background-color: #FFFFFF;
-          padding: 24px;
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-          height: 100%;
-          min-height: 400px;
-        }
-
-        .skeleton-image {
-          width: 100%;
-          flex-grow: 1;
-          background-color: #EDEDE8;
-          border-radius: 8px;
-          min-height: 250px;
-        }
-
-        .skeleton-details {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .skeleton-meta {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .skeleton-line {
-          height: 12px;
-          background-color: #EDEDE8;
-          border-radius: 4px;
-        }
-
-        .skeleton-line.short { width: 35%; }
-        .skeleton-line.tiny { width: 15%; }
-        .skeleton-line.medium { width: 60%; height: 18px; }
-        .skeleton-line.long { width: 90%; height: 28px; }
-
-        .shimmer {
-          position: relative;
-          overflow: hidden;
-        }
-
-        .shimmer::after {
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          transform: translateX(-100%);
-          background-image: linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.4) 20%,
-            rgba(255, 255, 255, 0.6) 60%,
-            rgba(255, 255, 255, 0) 100%
-          );
-          animation: shimmerAnim 1.6s infinite;
-          content: '';
-        }
-
-        @keyframes shimmerAnim {
-          100% {
-            transform: translateX(100%);
-          }
-        }
-      `}</style>
     </section>
   );
 }

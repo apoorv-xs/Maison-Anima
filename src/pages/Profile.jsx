@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useMonogram } from '../context/MonogramContext';
+import { gsap } from '../utils/gsap';
 
-function Profile({ currentUser, onLogout, userOrders = [], monogramPrefs = {}, onUpdatePrefs }) {
-  const [initials, setInitials] = useState(monogramPrefs.initials || '');
-  const [foil, setFoil] = useState(monogramPrefs.foil || 'gold');
+function Profile() {
+  const { currentUser, logout, userOrders } = useAuth();
+  const { monogramPrefs, updatePrefs } = useMonogram();
+  const [initials, setInitials] = useState(monogramPrefs?.initials || '');
+  const [foil, setFoil] = useState(monogramPrefs?.foil || 'gold');
   const [position, setPosition] = useState(monogramPrefs.position || 'strap');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [registryTokens, setRegistryTokens] = useState([]);
@@ -32,12 +37,12 @@ function Profile({ currentUser, onLogout, userOrders = [], monogramPrefs = {}, o
 
   const handlePreferencesSubmit = (e) => {
     e.preventDefault();
-    onUpdatePrefs({ initials: initials.toUpperCase(), foil, position });
+    updatePrefs({ initials: initials.toUpperCase(), foil, position });
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 2000);
 
-    if (window.gsap) {
-      window.gsap.fromTo('.save-alert',
+    if (gsap) {
+      gsap.fromTo('.save-alert',
         { opacity: 0, y: 10 },
         { opacity: 1, y: 0, duration: 0.4 }
       );
@@ -143,7 +148,7 @@ function Profile({ currentUser, onLogout, userOrders = [], monogramPrefs = {}, o
                 </div>
                 <div>
                   <button 
-                    onClick={onLogout}
+                    onClick={logout}
                     id="logoutBtn"
                     style={{
                       border: 'none',
@@ -344,8 +349,7 @@ function Profile({ currentUser, onLogout, userOrders = [], monogramPrefs = {}, o
                           cursor: 'pointer',
                           transition: 'all 0.3s'
                         }}
-                        onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#1C1B1A'; e.currentTarget.style.color = '#FFFFFF'; }}
-                        onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#1C1B1A'; }}
+                        className="btn-hover-dark"
                       >
                         Share
                       </button>

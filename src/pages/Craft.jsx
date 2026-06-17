@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { gsap, ScrollTrigger } from '../utils/gsap';
 
 function Craft() {
   useEffect(() => {
@@ -9,13 +10,9 @@ function Craft() {
       meta.setAttribute("content", "Explore the Florence artisanal chronology: sorting Tuscan hides, saddle-stitching, heated bamboo bended handles, and hot brass stamping.");
     }
 
-    if (window.gsap) {
-      const gsap = window.gsap;
-      const ScrollTrigger = window.ScrollTrigger;
-      gsap.registerPlugin(ScrollTrigger);
+    if (gsap) {
 
-      // Scene 1: Leather hide fade & text reveal
-      gsap.fromTo('.craft-desc-1', 
+      gsap.fromTo('.craft-desc-1',
         { opacity: 0, y: 30 },
         {
           opacity: 1,
@@ -29,12 +26,9 @@ function Craft() {
         }
       );
 
-      // Scene 2: SVG Stitching path animation
-      // Find the path length
       const stitchPath = document.getElementById('stitchPath');
       if (stitchPath) {
         const length = stitchPath.getTotalLength();
-        // Setup initial dash properties
         stitchPath.style.strokeDasharray = length;
         stitchPath.style.strokeDashoffset = length;
 
@@ -50,7 +44,6 @@ function Craft() {
         });
       }
 
-      // Scene 3: Bending temperature gauge and glowing handle
       gsap.to('.temp-bar-fill', {
         width: '100%',
         duration: 1,
@@ -73,7 +66,6 @@ function Craft() {
         }
       });
 
-      // Scene 4: Stamp block compression
       const stampTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: '.craft-scene-4',
@@ -83,7 +75,7 @@ function Craft() {
         }
       });
 
-      stampTimeline.fromTo('.craft-stamp-block', 
+      stampTimeline.fromTo('.craft-stamp-block',
         { y: -120, opacity: 0 },
         { y: 0, opacity: 1, duration: 1.2, ease: 'bounce.out' }
       );
@@ -101,8 +93,6 @@ function Craft() {
 
   return (
     <div className="craft-page" style={{ backgroundColor: '#FDFBF7', color: '#1C1B1A' }}>
-      
-      {/* Editorial Header */}
       <section className="editorial-section" style={{ padding: '160px 0 60px' }}>
         <div className="section-container" style={{ textAlign: 'center' }}>
           <span className="section-pretitle">The Heritage Studio</span>
@@ -116,7 +106,7 @@ function Craft() {
         </div>
       </section>
 
-      {/* Scene 1: Selection of Materials */}
+      {/* Scene 1 */}
       <section className="craft-scene-1" style={{ minHeight: '80vh', padding: '100px 0', borderTop: '1px solid #E5E2DE', display: 'flex', alignItems: 'center' }}>
         <div className="section-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '80px', alignItems: 'center' }}>
           <div className="craft-desc-1">
@@ -133,8 +123,7 @@ function Craft() {
               Only the top 8% of hides qualify for our signature Siena Tan and Ancora Rosso color-steeping baths.
             </p>
           </div>
-          
-          {/* Visual Parallax Leather Frame */}
+
           <div style={{
             height: '450px',
             borderRadius: '12px',
@@ -144,7 +133,6 @@ function Craft() {
             backgroundColor: '#B97C52',
             backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 100%)'
           }}>
-            {/* Macro leather grain look */}
             <div style={{
               position: 'absolute',
               top: 0, left: 0, width: '100%', height: '100%',
@@ -161,8 +149,7 @@ function Craft() {
               <span className="font-sans" style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', opacity: 0.8, marginBottom: '6px' }}>Regione</span>
               <span className="font-serif" style={{ fontSize: '1.5rem', fontWeight: 300 }}>Pisa, Toscana</span>
             </div>
-            
-            {/* Floating shadow ring */}
+
             <div style={{
               position: 'absolute',
               top: '50%',
@@ -178,33 +165,26 @@ function Craft() {
         </div>
       </section>
 
-      {/* Scene 2: Saddle-Stitch Animation */}
+      {/* Scene 2 */}
       <section className="craft-scene-2" style={{ minHeight: '80vh', padding: '100px 0', backgroundColor: '#F8F5F0', borderTop: '1px solid #E5E2DE', display: 'flex', alignItems: 'center' }}>
         <div className="section-container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '80px', alignItems: 'center' }}>
-          
-          {/* SVG Stitching Canvas */}
           <div style={{ textAlign: 'center', backgroundColor: '#FFFFFF', padding: '40px', borderRadius: '12px', border: '1px solid #E5E2DE', boxShadow: '0 20px 40px rgba(0,0,0,0.02)' }}>
             <svg viewBox="0 0 400 300" width="100%" height="260">
-              {/* Strap Path base outline */}
-              <path 
-                d="M 120,40 L 280,40 C 300,40 300,260 280,260 L 120,260 C 100,260 100,40 120,40 Z" 
-                fill="none" 
-                stroke="#E5E2DE" 
+              <path
+                d="M 120,40 L 280,40 C 300,40 300,260 280,260 L 120,260 C 100,260 100,40 120,40 Z"
+                fill="none"
+                stroke="#E5E2DE"
                 strokeWidth="1.5"
               />
-              
-              {/* Stitch Path that draws itself on scroll */}
-              <path 
+              <path
                 id="stitchPath"
-                d="M 120,40 L 280,40 C 300,40 300,260 280,260 L 120,260 C 100,260 100,40 120,40 Z" 
-                fill="none" 
-                stroke="#B97C52" 
-                strokeWidth="3.5" 
+                d="M 120,40 L 280,40 C 300,40 300,260 280,260 L 120,260 C 100,260 100,40 120,40 Z"
+                fill="none"
+                stroke="#B97C52"
+                strokeWidth="3.5"
                 strokeLinecap="round"
                 strokeDasharray="10, 8"
               />
-              
-              {/* Inner clasp metal circle mock */}
               <circle cx="200" cy="150" r="45" fill="#FAF6F0" stroke="#CFAC62" strokeWidth="3" />
               <path d="M 200,120 L 200,180 M 170,150 L 230,150" stroke="#CFAC62" strokeWidth="2.5" />
             </svg>
@@ -230,7 +210,7 @@ function Craft() {
         </div>
       </section>
 
-      {/* Scene 3: Curved Bamboo */}
+      {/* Scene 3 */}
       <section className="craft-scene-3" style={{ minHeight: '80vh', padding: '100px 0', borderTop: '1px solid #E5E2DE', display: 'flex', alignItems: 'center' }}>
         <div className="section-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '80px', alignItems: 'center' }}>
           <div>
@@ -246,8 +226,7 @@ function Craft() {
             <p className="product-description" style={{ fontSize: '0.98rem', lineHeight: '1.9', color: '#6A6764', marginBottom: '24px' }}>
               Once cooled, the handles are lacquered in multiple layers and flame-toasted to produce the signature black-burned ridges.
             </p>
-            
-            {/* Thermometer scale simulation */}
+
             <div className="font-sans" style={{ padding: '20px', border: '1px solid #E5E2DE', borderRadius: '8px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px', color: '#6A6764' }}>
                 <span>Artisan Flame Temperature</span>
@@ -258,32 +237,30 @@ function Craft() {
               </div>
             </div>
           </div>
-          
-          {/* Bamboo Silhouette render */}
+
           <div style={{ textAlign: 'center' }}>
             <div style={{ display: 'inline-block', padding: '60px', borderRadius: '50%', backgroundColor: '#FAF6F0', border: '1px solid #E5E2DE', position: 'relative' }}>
-              <svg 
-                className="craft-bamboo-img" 
-                viewBox="0 0 100 100" 
-                width="200" 
-                height="200" 
+              <svg
+                className="craft-bamboo-img"
+                viewBox="0 0 100 100"
+                width="200"
+                height="200"
                 style={{ filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.05))', transition: 'all 0.5s ease' }}
               >
-                {/* Bamboo arch shape */}
-                <path 
-                  d="M 15,90 C 15,20 85,20 85,90" 
-                  fill="none" 
-                  stroke="#5C4033" 
-                  strokeWidth="8" 
-                  strokeLinecap="round" 
+                <path
+                  d="M 15,90 C 15,20 85,20 85,90"
+                  fill="none"
+                  stroke="#5C4033"
+                  strokeWidth="8"
+                  strokeLinecap="round"
                   strokeDasharray="12,1,10,1,15,1"
                 />
-                <path 
-                  d="M 15,90 C 15,20 85,20 85,90" 
-                  fill="none" 
-                  stroke="#D4AF37" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
+                <path
+                  d="M 15,90 C 15,20 85,20 85,90"
+                  fill="none"
+                  stroke="#D4AF37"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                   strokeDasharray="12,1,10,1,15,1"
                   opacity="0.3"
                 />
@@ -293,17 +270,14 @@ function Craft() {
         </div>
       </section>
 
-      {/* Scene 4: Stamping block */}
+      {/* Scene 4 */}
       <section className="craft-scene-4" style={{ minHeight: '90vh', padding: '100px 0', backgroundColor: '#F8F5F0', borderTop: '1px solid #E5E2DE', display: 'flex', alignItems: 'center' }}>
         <div className="section-container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '80px', alignItems: 'center' }}>
-          
-          {/* Hot stamp simulation stage */}
           <div style={{ position: 'relative', height: '400px', backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E2DE', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <div style={{ position: 'absolute', top: '20px', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#6A6764' }} className="font-sans">
               Hot Brass Emboss Simulation
             </div>
-            
-            {/* Press head */}
+
             <div className="craft-stamp-block" style={{
               width: '180px',
               padding: '16px',
@@ -322,7 +296,6 @@ function Craft() {
               <div style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: '20px', height: '8px', backgroundColor: '#BF953F' }}></div>
             </div>
 
-            {/* Leather backplane */}
             <div className="craft-leather-backing" style={{
               width: '280px',
               height: '100px',
@@ -337,7 +310,6 @@ function Craft() {
               alignItems: 'center',
               transformOrigin: 'center bottom'
             }}>
-              {/* Imprinted gold logo revealed */}
               <span className="craft-gold-imprint monogram-gold" style={{
                 fontFamily: 'var(--font-serif)',
                 fontSize: '1.5rem',
@@ -363,8 +335,8 @@ function Craft() {
             <p className="product-description" style={{ fontSize: '0.98rem', lineHeight: '1.9', color: '#6A6764', marginBottom: '36px' }}>
               If gold foil is selected, a micro-thin layer of metallic leaf is fused permanently into the deep debossed grooves, ensuring it never flakes or fades.
             </p>
-            
-            <Link 
+
+            <Link
               to="/customizer"
               className="checkout-btn"
               style={{ display: 'inline-block', width: 'auto', padding: '16px 36px' }}
@@ -375,10 +347,9 @@ function Craft() {
         </div>
       </section>
 
-      {/* Footer link to continue showcase */}
       <section style={{ padding: '80px 0', textAlign: 'center', borderTop: '1px solid #E5E2DE' }}>
         <h3 className="font-serif" style={{ fontSize: '1.8rem', fontWeight: 400, marginBottom: '20px' }}>Ready to explore customization?</h3>
-        <Link 
+        <Link
           to="/customizer"
           className="luxury-cta"
           style={{ border: '1px solid #1C1B1A', opacity: 1, transform: 'none' }}

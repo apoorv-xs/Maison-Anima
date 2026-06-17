@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { MaisonCloudDB } from '../utils/api';
+import { sanitizeInput } from '../utils/sanitize';
+import { useCart } from '../context/CartContext';
+import { gsap } from '../utils/gsap';
 
-function Registry({ onAddToCart }) {
+function Registry() {
+  const { addToCart } = useCart();
   const { token } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -73,17 +77,10 @@ function Registry({ onAddToCart }) {
   const handleAdoptCuration = () => {
     sharedCart.forEach((item) => {
       // Add each item to parent cart state
-      onAddToCart(item.id, item.name, item.price, item.image, item.meta, item.monogram);
+      addToCart(item.id, item.name, item.price, item.image, item.meta, item.monogram);
     });
     // Open bag or redirect to cart
     navigate('/cart');
-  };
-
-  const sanitizeInput = (text) => {
-    return text
-      .replace(/<[^>]*>/g, '')
-      .replace(/javascript:/gi, '')
-      .replace(/on\w+\s*=/gi, '');
   };
 
   const handleAddComment = (e) => {
@@ -115,8 +112,8 @@ function Registry({ onAddToCart }) {
       setGuestComment('');
       setSubmittingComment(false);
 
-      if (window.gsap) {
-        window.gsap.fromTo('.comment-card-new',
+      if (gsap) {
+        gsap.fromTo('.comment-card-new',
           { opacity: 0, y: 15 },
           { opacity: 1, y: 0, duration: 0.6 }
         );
@@ -314,7 +311,7 @@ function Registry({ onAddToCart }) {
                       type="text" 
                       required
                       id="guestNameInput"
-                      placeholder="Aldo Gucci" 
+                      placeholder="Aldo Anima" 
                       value={guestName}
                       onChange={(e) => setGuestName(e.target.value)}
                       style={{ border: '1px solid #E5E2DE', borderRadius: '20px', padding: '10px 16px', fontSize: '0.85rem', outline: 'none' }}
@@ -363,8 +360,7 @@ function Registry({ onAddToCart }) {
                     alignSelf: 'flex-start',
                     transition: 'all 0.3s'
                   }}
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#B97C52'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = '#1C1B1A'}
+                  className="btn-hover-siena-bg"
                 >
                   {submittingComment ? 'Stamping Seal...' : 'Stamp Guest Note'}
                 </button>
@@ -476,8 +472,7 @@ function Registry({ onAddToCart }) {
                 color: '#6A6764',
                 transition: 'color 0.3s'
               }}
-              onMouseOver={(e) => e.target.style.color = '#B97C52'}
-              onMouseOut={(e) => e.target.style.color = '#6A6764'}
+              className="link-hover-siena"
             >
               Explore Other Collections
             </Link>

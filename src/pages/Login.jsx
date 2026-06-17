@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { gsap } from '../utils/gsap';
 
-function Login({ onLoginSuccess }) {
+function Login() {
   const navigate = useNavigate();
+  const { loginSuccess } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,11 +30,11 @@ function Login({ onLoginSuccess }) {
     // Simulate network authentication delay
     setTimeout(() => {
       setLoading(false);
-      
+
       const isVIP = email.trim().toLowerCase() === 'vip@anima.com' && password === '1921';
-      
+
       const loggedUser = {
-        name: isVIP ? 'Aldo Gucci' : email.split('@')[0].toUpperCase(),
+        name: isVIP ? 'Aldo Anima' : email.split('@')[0].toUpperCase(),
         email: email.trim().toLowerCase(),
         tier: isVIP ? 'Elite Collector' : 'Registered Guest',
         memberId: `ANIMA-ID-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -43,16 +46,15 @@ function Login({ onLoginSuccess }) {
       setShowSuccessSeal(true);
 
       // Trigger GSAP stamp impact on the success seal
-      if (window.gsap) {
+      if (gsap) {
         setTimeout(() => {
-          const gsap = window.gsap;
           gsap.fromTo('.wax-seal-success',
             { scale: 4, opacity: 0, rotate: -30 },
-            { 
-              scale: 1, 
-              opacity: 1, 
-              rotate: 0, 
-              duration: 0.8, 
+            {
+              scale: 1,
+              opacity: 1,
+              rotate: 0,
+              duration: 0.8,
               ease: 'bounce.out',
               onComplete: () => {
                 // Shake the viewport briefly on stamp impact
@@ -62,7 +64,7 @@ function Login({ onLoginSuccess }) {
                 );
                 // Hold seal briefly, then navigate
                 setTimeout(() => {
-                  onLoginSuccess(loggedUser);
+                  loginSuccess(loggedUser);
                   navigate('/profile');
                 }, 1000);
               }
@@ -72,7 +74,7 @@ function Login({ onLoginSuccess }) {
       } else {
         // Fallback if GSAP is not loaded
         setTimeout(() => {
-          onLoginSuccess(loggedUser);
+          loginSuccess(loggedUser);
           navigate('/profile');
         }, 1200);
       }
@@ -82,8 +84,8 @@ function Login({ onLoginSuccess }) {
   const handleVIPQuickPass = () => {
     setEmail('VIP@anima.com');
     setPassword('1921');
-    if (window.gsap) {
-      window.gsap.fromTo('.login-form-card',
+    if (gsap) {
+      gsap.fromTo('.login-form-card',
         { scale: 0.98 },
         { scale: 1, duration: 0.4, ease: 'power2.out' }
       );
@@ -92,7 +94,7 @@ function Login({ onLoginSuccess }) {
 
   return (
     <div className="login-page-container" style={{ minHeight: '90vh', backgroundColor: '#FDFBF7', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 20px', position: 'relative' }}>
-      
+
       {/* Success Wax Seal Overlay */}
       {showSuccessSeal && (
         <div style={{
@@ -110,7 +112,7 @@ function Login({ onLoginSuccess }) {
             width: '200px',
             height: '200px',
             borderRadius: '50%',
-            backgroundColor: '#A30026', // Gucci dark red wax seal
+            backgroundColor: '#A30026', // Anima dark red wax seal
             border: '8px double #D4AF37',
             display: 'flex',
             flexDirection: 'column',
@@ -127,7 +129,7 @@ function Login({ onLoginSuccess }) {
               borderRadius: '50%',
               border: '2px solid rgba(255,255,255,0.1)'
             }}></div>
-            
+
             <span style={{
               fontFamily: 'var(--font-serif)',
               fontSize: '1rem',
@@ -163,7 +165,7 @@ function Login({ onLoginSuccess }) {
         boxShadow: '0 25px 60px rgba(28, 27, 26, 0.03)',
         transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
       }}>
-        
+
         {/* Title */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <span className="font-sans text-xs uppercase tracking-widest text-muted" style={{ color: '#B97C52', fontSize: '0.72rem', display: 'block', marginBottom: '8px' }}>
@@ -177,16 +179,16 @@ function Login({ onLoginSuccess }) {
 
         {/* Input Form */}
         <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }} className="font-sans">
-          
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <label style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#6A6764', fontWeight: 500 }}>
               Email Address
             </label>
-            <input 
-              type="email" 
+            <input
+              type="email"
               required
               id="loginEmail"
-              placeholder="client@anima.com" 
+              placeholder="client@anima.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={{
@@ -211,11 +213,11 @@ function Login({ onLoginSuccess }) {
                 Forgot Passcode?
               </span>
             </div>
-            <input 
-              type="password" 
+            <input
+              type="password"
               required
               id="loginPassword"
-              placeholder="••••" 
+              placeholder="••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{
@@ -237,8 +239,8 @@ function Login({ onLoginSuccess }) {
             </p>
           )}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={loading}
             id="loginSubmitBtn"
             className="checkout-btn"
@@ -257,9 +259,10 @@ function Login({ onLoginSuccess }) {
 
         {/* VIP Quick Pass */}
         <div style={{ textAlign: 'center' }}>
-          <button 
+          <button
             onClick={handleVIPQuickPass}
             id="vipQuickPassBtn"
+            className="btn-outline-gold"
             style={{
               width: '100%',
               padding: '14px',
@@ -275,8 +278,6 @@ function Login({ onLoginSuccess }) {
               cursor: 'pointer',
               transition: 'all 0.3s'
             }}
-            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#D4AF37'; e.currentTarget.style.color = '#FFFFFF'; }}
-            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'rgba(212, 175, 55, 0.03)'; e.currentTarget.style.color = '#D4AF37'; }}
           >
             ⚜ VIP Quick Invitation Pass
           </button>

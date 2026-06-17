@@ -3,14 +3,13 @@ import Hero from '../components/Hero';
 import Editorial from '../components/Editorial';
 import Customizer from '../components/Customizer';
 import Quote from '../components/Quote';
+import { useMonogram } from '../context/MonogramContext';
+import { gsap, ScrollTrigger } from '../utils/gsap';
 
-function Home({ onAddToCart, monogramPrefs, onUpdatePrefs }) {
+function Home() {
+  const { monogramPrefs, updatePrefs } = useMonogram();
   useEffect(() => {
-    if (window.gsap) {
-      const gsap = window.gsap;
-      const ScrollTrigger = window.ScrollTrigger;
-      gsap.registerPlugin(ScrollTrigger);
-
+    if (gsap) {
       // Hero Entry
       const heroTimeline = gsap.timeline({ delay: 0.2 });
       heroTimeline.to('#heroSubtitle', {
@@ -131,8 +130,8 @@ function Home({ onAddToCart, monogramPrefs, onUpdatePrefs }) {
   return (
     <div>
       <Hero />
-      <Editorial onAddToCart={onAddToCart} />
-      <Customizer onAddToCart={onAddToCart} defaultPrefs={monogramPrefs} onUpdatePrefs={onUpdatePrefs} />
+      <Editorial />
+      <Customizer />
       <Quote />
     </div>
   );

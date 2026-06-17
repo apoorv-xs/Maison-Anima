@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled, currentUser }) {
+function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled }) {
+  const { currentUser } = useAuth();
+
   return (
     <header className={`glass-header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="header-container">
@@ -14,18 +17,18 @@ function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled, currentUser }) {
           <Link to="/craft" className="nav-item desktop-only">Crafts</Link>
           <Link to="/journal" className="nav-item desktop-only">Journal</Link>
         </div>
-        
+
         <Link to="/" className="brand-logo">ANIMA</Link>
-        
+
         <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
           {currentUser ? (
-            <Link 
-              to="/profile" 
-              className="nav-item" 
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px', 
+            <Link
+              to="/profile"
+              className="nav-item"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
                 fontWeight: 500,
                 color: 'var(--text-dark)'
               }}
@@ -33,18 +36,17 @@ function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled, currentUser }) {
               <span className="desktop-only" style={{ fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                 {currentUser.name.split(' ')[0]}
               </span>
-              {/* Circular wax seal style monogram initials */}
-              <span 
+              <span
                 className="monogram-gold"
-                style={{ 
-                  width: '26px', 
-                  height: '26px', 
-                  borderRadius: '50%', 
-                  backgroundColor: '#A30026', 
-                  border: '1.5px solid #D4AF37', 
+                style={{
+                  width: '26px',
+                  height: '26px',
+                  borderRadius: '50%',
+                  backgroundColor: '#A30026',
+                  border: '1.5px solid #D4AF37',
                   color: '#FFFFFF',
-                  display: 'flex', 
-                  alignItems: 'center', 
+                  display: 'flex',
+                  alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '0.62rem',
                   fontFamily: 'var(--font-serif)',
@@ -56,9 +58,9 @@ function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled, currentUser }) {
               </span>
             </Link>
           ) : (
-            <Link 
-              to="/login" 
-              className="nav-item" 
+            <Link
+              to="/login"
+              className="nav-item"
               style={{ fontSize: '0.72rem', letterSpacing: '0.22em', textTransform: 'uppercase' }}
             >
               Sign In
@@ -67,7 +69,7 @@ function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled, currentUser }) {
 
           <button className="nav-item nav-btn bag-btn" id="bagBtn" onClick={onBagOpen}>
             <span className="btn-text">Anima Bag</span>
-            <span className="bag-count" id="bagCount" style={{ marginLeft: '8px' }}>{bagCount}</span>
+            <span className="bag-count" id="bagCount" aria-live="polite" aria-label={`${bagCount} items in bag`} style={{ marginLeft: '8px' }}>{bagCount}</span>
           </button>
         </div>
       </div>

@@ -1,4 +1,10 @@
 // Maison Anima - Headless CMS & Cloud Sync API Layer
+import {
+  API_PRODUCT_LIST_DELAY_MS,
+  API_PRODUCT_DETAIL_DELAY_MS,
+  API_SYNC_DELAY_MS,
+  API_RETRIEVE_DELAY_MS,
+} from './constants';
 
 const PRODUCTS_DATA = [
   {
@@ -49,21 +55,14 @@ const PRODUCTS_DATA = [
 ];
 
 export const MaisonCMS = {
-  /**
-   * Simulates fetching products dynamically from a headless CMS (like Sanity/Shopify)
-   * with a loading latency of 1.2s.
-   */
   fetchProducts: async () => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([...PRODUCTS_DATA]);
-      }, 1200);
+      }, API_PRODUCT_LIST_DELAY_MS);
     });
   },
 
-  /**
-   * Simulates fetching a single product detail by ID with 800ms delay.
-   */
   fetchProductById: async (id) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -73,22 +72,17 @@ export const MaisonCMS = {
         } else {
           reject(new Error(`Product with ID ${id} not found in Maison registry.`));
         }
-      }, 800);
+      }, API_PRODUCT_DETAIL_DELAY_MS);
     });
   }
 };
 
 export const MaisonCloudDB = {
-  /**
-   * Simulates syncing shopping bag state to a cloud database (MongoDB/PostgreSQL).
-   * Generates a unique sync token and persists it to a simulated remote database map in localStorage.
-   */
   syncCart: async (cart, giftNote = '', giftWrapping = 'signature') => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const syncToken = `ANIMA-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
         try {
-          // Simulate remote database table by storing in a separate localStorage entry
           const remoteDB = JSON.parse(localStorage.getItem('maison_cloud_db') || '{}');
           remoteDB[syncToken] = {
             cart,
@@ -102,13 +96,10 @@ export const MaisonCloudDB = {
           console.error("Cloud DB Sync failed:", e);
           resolve(null);
         }
-      }, 1500); // Simulated network latency for DB insertion
+      }, API_SYNC_DELAY_MS);
     });
   },
 
-  /**
-   * Simulates retrieving shopping bag state from a cloud database using a sync token.
-   */
   retrieveCart: async (syncToken) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -123,7 +114,7 @@ export const MaisonCloudDB = {
         } catch {
           reject(new Error("Cloud DB retrieval failed."));
         }
-      }, 1200); // Simulated query response time
+      }, API_RETRIEVE_DELAY_MS);
     });
   }
 };

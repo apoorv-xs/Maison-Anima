@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-function ProductModal({ product, onClose, onAddToCart }) {
+import { useCart } from '../context/CartContext';
+function ProductModal({ product, onClose }) {
+  const { addToCart } = useCart();
   const [activeTab, setActiveTab] = useState('story'); // story | details | packaging
 
   if (!product) return null;
 
   const handleAdd = () => {
-    onAddToCart(product.id, product.name, product.price, product.image, 'Classic Edition');
+    addToCart(product.id, product.name, product.price, product.image, 'Classic Edition');
     onClose();
   };
 
@@ -22,7 +24,11 @@ function ProductModal({ product, onClose, onAddToCart }) {
       alignItems: 'center',
       justifyContent: 'center',
       padding: '20px'
-    }}>
+    }}
+    role="dialog"
+    aria-modal="true"
+    aria-label={`Product details: ${product.name}`}
+    >
       <div 
         onClick={onClose}
         style={{
@@ -87,8 +93,9 @@ function ProductModal({ product, onClose, onAddToCart }) {
               <span className="font-sans text-xs uppercase tracking-widest text-muted" style={{ color: '#6A6764', fontSize: '0.7rem' }}>
                 {product.meta}
               </span>
-              <button 
+              <button
                 onClick={onClose}
+                aria-label="Close product details"
                 style={{
                   fontSize: '2rem',
                   lineHeight: '1',
@@ -96,8 +103,7 @@ function ProductModal({ product, onClose, onAddToCart }) {
                   cursor: 'pointer',
                   transition: 'color 0.3s'
                 }}
-                onMouseOver={(e) => e.target.style.color = '#1C1B1A'}
-                onMouseOut={(e) => e.target.style.color = '#6A6764'}
+                className="link-hover-dark"
               >
                 &times;
               </button>
@@ -160,7 +166,7 @@ function ProductModal({ product, onClose, onAddToCart }) {
                 <p>{product.description}</p>
               )}
               {activeTab === 'details' && (
-                <p>Hand-crafted in Tuscany, Italy. Built with select full-grain calfskin leather, hand-stained linings, and signature Gucci light-gold hardware detailing. Measures 11.5" x 7.8" x 2".</p>
+                <p>Hand-crafted in Tuscany, Italy. Built with select full-grain calfskin leather, hand-stained linings, and signature Anima light-gold hardware detailing. Measures 11.5" x 7.8" x 2".</p>
               )}
               {activeTab === 'packaging' && (
                 <p>Complimentary signature Ancora Rosso gift box with green-red satin ribbon included. Comes with digital authenticity certificates and elegant linen protective bags.</p>
@@ -177,14 +183,7 @@ function ProductModal({ product, onClose, onAddToCart }) {
           </button>
         </div>
       </div>
-      
-      {/* Modal Keyframe Animation Style */}
-      <style>{`
-        @keyframes modalFadeIn {
-          from { opacity: 0; transform: scale(0.96); }
-          to { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
+
     </div>,
     document.body
   );

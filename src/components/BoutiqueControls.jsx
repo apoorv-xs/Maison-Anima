@@ -247,13 +247,6 @@ function BoutiqueControls() {
           </span>
         )}
       </div>
-
-      <style>{`
-        @keyframes fadeInText {
-          from { opacity: 0; transform: translateX(-4px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-      `}</style>
     </>
   );
 }

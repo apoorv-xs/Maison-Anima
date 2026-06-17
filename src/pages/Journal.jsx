@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MaisonCMS } from '../utils/api';
 import ProductModal from '../components/ProductModal';
+import { useCart } from '../context/CartContext';
 
 const lookbookEntries = [
   {
@@ -24,7 +25,8 @@ const lookbookEntries = [
   }
 ];
 
-function Journal({ onAddToCart }) {
+function Journal() {
+  const { addToCart } = useCart();
   const [activeProductId, setActiveProductId] = useState(null);
   const [productsMap, setProductsMap] = useState({});
   const [loadingProduct, setLoadingProduct] = useState(false);
@@ -53,7 +55,7 @@ function Journal({ onAddToCart }) {
   };
 
   const handleAddHotspotItem = (product) => {
-    onAddToCart(product.id, product.name, product.price, product.image, product.meta);
+    addToCart(product.id, product.name, product.price, product.image, product.meta);
     alert(`${product.name} has been added to your shopping bag.`);
   };
 
@@ -252,8 +254,7 @@ function Journal({ onAddToCart }) {
                               cursor: 'pointer',
                               transition: 'all 0.3s'
                             }}
-                            onMouseOver={(e) => { e.target.style.backgroundColor = '#1C1B1A'; e.target.style.color = '#FFFFFF'; }}
-                            onMouseOut={(e) => { e.target.style.backgroundColor = 'transparent'; e.target.style.color = '#1C1B1A'; }}
+                            className="btn-hover-dark"
                           >
                             Quick View
                           </button>
@@ -271,8 +272,7 @@ function Journal({ onAddToCart }) {
                               cursor: 'pointer',
                               transition: 'all 0.3s'
                             }}
-                            onMouseOver={(e) => e.target.style.backgroundColor = '#B97C52'}
-                            onMouseOut={(e) => e.target.style.backgroundColor = '#1C1B1A'}
+                            className="btn-hover-siena-bg"
                           >
                             Shop Item
                           </button>
@@ -298,29 +298,11 @@ function Journal({ onAddToCart }) {
           ))}
         </div>
       </div>
-      
-      {/* Styles for Pin Pulse & Spinner Animation */}
-      <style>{`
-        @keyframes pulsePin {
-          0% { transform: scale(1) translateZ(30px); box-shadow: 0 0 0 0 rgba(185, 124, 82, 0.5); }
-          70% { transform: scale(1.1) translateZ(30px); box-shadow: 0 0 0 10px rgba(185, 124, 82, 0); }
-          100% { transform: scale(1) translateZ(30px); box-shadow: 0 0 0 0 rgba(185, 124, 82, 0); }
-        }
-        @keyframes slideInCard {
-          from { opacity: 0; transform: translateY(15px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes spinLoad {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
-      
+
       {selectedProduct && (
-        <ProductModal 
-          product={selectedProduct} 
-          onClose={() => setSelectedProduct(null)} 
-          onAddToCart={onAddToCart} 
+        <ProductModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
         />
       )}
     </section>

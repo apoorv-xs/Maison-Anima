@@ -1,48 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+import CartItem from './CartItem';
 
-function BagDrawer({ isOpen, onClose, cart, onRemoveItem }) {
+function BagDrawer({ isOpen, onClose }) {
+  const { cart, removeItem } = useCart();
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   return (
-    <div className={`bag-drawer ${isOpen ? 'open' : ''}`} id="bagDrawer">
+    <div className={`bag-drawer ${isOpen ? 'open' : ''}`} id="bagDrawer" role="dialog" aria-modal="true" aria-label="Shopping bag">
       <div className="bag-overlay" id="bagOverlay" onClick={onClose}></div>
       <div className="bag-content">
         <div className="drawer-header">
           <span className="drawer-title">Anima Bag</span>
-          <button className="close-btn" id="closeBagBtn" onClick={onClose}>&times;</button>
+          <button className="close-btn" id="closeBagBtn" onClick={onClose} aria-label="Close shopping bag">&times;</button>
         </div>
 
         <div className="bag-items" id="bagItems">
           {cart.length === 0 ? (
             <p className="empty-bag-message" id="emptyBagMsg">Your shopping bag is currently empty.</p>
           ) : (
-            cart.map((item, index) => {
-              let metaText = item.meta || '';
-              if (item.monogram) {
-                metaText += ` • Monogram: "${item.monogram}"`;
-              }
-              return (
-                <div className="cart-item" key={index}>
-                  <img src={item.image} alt={item.name} className="cart-item-img" />
-                  <div className="cart-item-details">
-                    <h4 className="cart-item-name">{item.name}</h4>
-                    <p className="cart-item-meta">{metaText}</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: '8px' }}>
-                      <span className="cart-item-price">
-                        ${(item.price * item.quantity).toLocaleString()}
-                        {item.quantity > 1 && (
-                          <span style={{ fontSize: '0.72rem', color: '#6A6764', fontWeight: 'normal', marginLeft: '6px' }}>
-                            ({item.quantity} × ${item.price.toLocaleString()})
-                          </span>
-                        )}
-                      </span>
-                      <button className="remove-item-btn font-sans" onClick={() => onRemoveItem(index)}>Remove</button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
+            cart.map((item, index) => (
+              <CartItem key={index} item={item} index={index} onRemove={removeItem} compact />
+            ))
           )}
         </div>
 
@@ -52,13 +32,7 @@ function BagDrawer({ isOpen, onClose, cart, onRemoveItem }) {
               <span className="font-sans text-xs uppercase tracking-widest text-muted" style={{ fontSize: '0.75rem', letterSpacing: '0.2em' }}>Subtotal</span>
               <span className="bag-subtotal" id="bagSubtotal">${subtotal.toLocaleString()}</span>
             </div>
-            <Link 
-              to="/cart" 
-              className="checkout-btn" 
-              id="checkoutBtn"
-              onClick={onClose}
-              style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
-            >
+            <Link to="/cart" className="checkout-btn" id="checkoutBtn" onClick={onClose} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
               View Bag & Checkout
             </Link>
           </div>

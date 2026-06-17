@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useCart } from '../context/CartContext';
+import { useMonogram } from '../context/MonogramContext';
+import { gsap } from '../utils/gsap';
 
 const swatchesList = [
   { color: 'original', name: 'Siena Tan', hex: '#B97C52' },
@@ -20,7 +23,9 @@ const STAMP_LOCATIONS = {
   clasp: { label: 'Artisanal Clasp', top: '44%', left: '50.3%', zoomX: 0, zoomY: 10 }
 };
 
-function Customizer({ onAddToCart, defaultPrefs, onUpdatePrefs }) {
+function Customizer() {
+  const { addToCart } = useCart();
+  const { monogramPrefs: defaultPrefs, updatePrefs: onUpdatePrefs } = useMonogram();
   const [color, setColor] = useState('original');
   const [colorName, setColorName] = useState('Siena Tan');
   const [monogramInput, setMonogramInput] = useState(defaultPrefs?.initials || '');
@@ -46,8 +51,8 @@ function Customizer({ onAddToCart, defaultPrefs, onUpdatePrefs }) {
     setColor(swatch.color);
     setColorName(swatch.name);
     
-    if (window.gsap) {
-      window.gsap.fromTo('#selectedColorName', 
+    if (gsap) {
+      gsap.fromTo('#selectedColorName', 
         { opacity: 0, x: -10 },
         { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }
       );
@@ -64,9 +69,8 @@ function Customizer({ onAddToCart, defaultPrefs, onUpdatePrefs }) {
       }
       
       // Stamp Animation
-      if (window.gsap) {
-        const gsap = window.gsap;
-        
+      if (gsap) {
+
         // 1. Hot stamp landing flash on stage
         gsap.fromTo('.preview-stage', 
           { filter: 'brightness(1.5) contrast(0.95)' },
@@ -128,7 +132,7 @@ function Customizer({ onAddToCart, defaultPrefs, onUpdatePrefs }) {
   const handleAddCustomToBag = () => {
     const name = "The Custom Jackie Bag";
     const meta = `Finish: ${colorName} • Foil: ${foil === 'gold' ? 'Gold Embossed' : 'Blind Debossed'} • Position: ${STAMP_LOCATIONS[stampLocation].label}`;
-    onAddToCart('custom-jackie', name, price, `/assets/jackie_${color}.png`, meta, appliedMonogram);
+    addToCart('custom-jackie', name, price, `/assets/jackie_${color}.png`, meta, appliedMonogram);
   };
 
   return (
@@ -297,8 +301,8 @@ function Customizer({ onAddToCart, defaultPrefs, onUpdatePrefs }) {
                         onUpdatePrefs({ initials: appliedMonogram, foil, position: key });
                       }
                       // Visual flash on relocation
-                      if (window.gsap && appliedMonogram) {
-                        window.gsap.fromTo('.monogram-text-render', 
+                      if (gsap && appliedMonogram) {
+                        gsap.fromTo('.monogram-text-render', 
                           { opacity: 0.3 }, 
                           { opacity: 1, duration: 0.4 }
                         );
@@ -448,14 +452,6 @@ function Customizer({ onAddToCart, defaultPrefs, onUpdatePrefs }) {
           </div>
         </div>
       </div>
-      
-      {/* Styles for gold shimmer keyframe animation */}
-      <style>{`
-        @keyframes goldShimmer {
-          0% { background-position: 0% center; }
-          100% { background-position: 200% center; }
-        }
-      `}</style>
     </section>
   );
 }

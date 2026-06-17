@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
 import Editorial from '../components/Editorial';
+import { gsap, ScrollTrigger } from '../utils/gsap';
 
-function Collections({ onAddToCart }) {
+function Collections() {
   useEffect(() => {
-    if (window.gsap) {
-      const gsap = window.gsap;
-      const ScrollTrigger = window.ScrollTrigger;
-      gsap.registerPlugin(ScrollTrigger);
+    if (gsap) {
 
       // Scroll Reveal for Editorial Cards (staggered entry)
       gsap.utils.toArray('.editorial-card').forEach((card) => {
@@ -36,7 +34,7 @@ function Collections({ onAddToCart }) {
 
   return (
     <div>
-      <Editorial onAddToCart={onAddToCart} />
+      <Editorial />
     </div>
   );
 }
