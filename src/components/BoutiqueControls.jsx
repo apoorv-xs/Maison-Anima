@@ -4,11 +4,19 @@ import { Volume2, VolumeX, Grid, Eye, EyeOff } from 'lucide-react';
 function BoutiqueControls() {
   const [isAudioActive, setIsAudioActive] = useState(false);
   const [isGridActive, setIsGridActive] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
   
   const audioCtxRef = useRef(null);
   const noiseNodeRef = useRef(null);
   const chordIntervalRef = useRef(null);
   const clickIntervalRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowTooltip(false);
+    }, 12000); // Auto-dismiss after 12 seconds
+    return () => clearTimeout(timer);
+  }, []);
 
   const startSoundscape = () => {
     try {
@@ -138,6 +146,7 @@ function BoutiqueControls() {
   };
 
   const toggleAudio = () => {
+    setShowTooltip(false);
     if (isAudioActive) {
       stopSoundscape();
       setIsAudioActive(false);
@@ -189,9 +198,74 @@ function BoutiqueControls() {
           transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
+        {/* Tooltip Invitation */}
+        {showTooltip && (
+          <div 
+            className="audio-tooltip"
+            style={{
+              position: 'absolute',
+              bottom: '52px',
+              left: '0px',
+              backgroundColor: 'rgba(28, 27, 26, 0.95)',
+              color: '#FFFFFF',
+              padding: '10px 14px',
+              borderRadius: '16px',
+              fontSize: '0.62rem',
+              fontWeight: '500',
+              fontFamily: 'var(--font-sans)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.15em',
+              whiteSpace: 'nowrap',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+              border: '1px solid rgba(229, 226, 222, 0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              pointerEvents: 'auto',
+              animation: 'slideUpTooltip 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+            }}
+          >
+            <span>Experience with sound</span>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowTooltip(false);
+              }}
+              style={{
+                color: 'rgba(255, 255, 255, 0.5)',
+                fontWeight: '400',
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+                transition: 'color 0.2s',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#FFFFFF'}
+              onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.5)'}
+            >
+              ×
+            </button>
+            {/* Small Triangle Indicator */}
+            <div 
+              style={{
+                position: 'absolute',
+                bottom: '-6px',
+                left: '14px',
+                width: '0',
+                height: '0',
+                borderLeft: '6px solid transparent',
+                borderRight: '6px solid transparent',
+                borderTop: '6px solid rgba(28, 27, 26, 0.95)',
+                filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.1))'
+              }}
+            ></div>
+          </div>
+        )}
+
         {/* Audio Toggle */}
         <button
           onClick={toggleAudio}
+          className={!isAudioActive && showTooltip ? "pulse-audio-btn" : ""}
           title={isAudioActive ? "Mute Atmospheric Soundscape" : "Play Atmospheric Soundscape"}
           style={{
             width: '32px',
