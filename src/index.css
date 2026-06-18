@@ -167,6 +167,23 @@ a {
     transform: translateY(-1px);
 }
 
+.nav-item.active {
+    color: var(--accent-siena);
+    position: relative;
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--accent-siena);
+}
+
 .brand-logo {
     font-family: var(--font-serif);
     font-size: 2.1rem;
@@ -293,6 +310,11 @@ a {
 .drawer-link:hover {
     color: var(--accent-siena);
     transform: translateX(6px);
+}
+
+.drawer-link.active {
+    color: var(--accent-siena);
+    font-weight: 500;
 }
 
 /* Bag Drawer Items Container */

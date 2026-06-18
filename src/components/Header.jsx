@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled }) {
@@ -12,10 +12,10 @@ function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled }) {
           <button className="nav-item nav-btn menu-btn mobile-only" id="menuBtn" onClick={onMenuOpen}>
             <span className="btn-text">Menu</span>
           </button>
-          <Link to="/collections" className="nav-item desktop-only">Runway</Link>
-          <Link to="/customizer" className="nav-item desktop-only">Customizer</Link>
-          <Link to="/craft" className="nav-item desktop-only">Crafts</Link>
-          <Link to="/journal" className="nav-item desktop-only">Journal</Link>
+          <NavLink to="/collections" className="nav-item desktop-only">Runway</NavLink>
+          <NavLink to="/customizer" className="nav-item desktop-only">Customizer</NavLink>
+          <NavLink to="/craft" className="nav-item desktop-only">Crafts</NavLink>
+          <NavLink to="/journal" className="nav-item desktop-only">Journal</NavLink>
         </div>
 
         <Link to="/" className="brand-logo">ANIMA</Link>
