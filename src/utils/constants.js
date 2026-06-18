@@ -4,10 +4,10 @@
 export const INACTIVITY_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
 // API simulation delays
-export const API_PRODUCT_LIST_DELAY_MS = 1200;
-export const API_PRODUCT_DETAIL_DELAY_MS = 800;
-export const API_SYNC_DELAY_MS = 1500;
-export const API_RETRIEVE_DELAY_MS = 1200;
+export const API_PRODUCT_LIST_DELAY_MS = 150;
+export const API_PRODUCT_DETAIL_DELAY_MS = 100;
+export const API_SYNC_DELAY_MS = 200;
+export const API_RETRIEVE_DELAY_MS = 150;
 
 // Boutique controls
 export const CHORD_INTERVAL_MS = 9500;
