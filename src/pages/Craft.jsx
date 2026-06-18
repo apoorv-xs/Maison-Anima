@@ -56,6 +56,45 @@ function Craft() {
         }
       });
 
+      // Bending/curving the bamboo handle dynamically as the user scrolls
+      gsap.to('#bambooPath', {
+        attr: { d: 'M 15,90 C 15,20 85,20 85,90' },
+        scrollTrigger: {
+          trigger: '.craft-scene-3',
+          start: 'top 60%',
+          end: 'bottom 80%',
+          scrub: true
+        }
+      });
+
+      gsap.to('#bambooGlowPath', {
+        attr: { d: 'M 15,90 C 15,20 85,20 85,90' },
+        scrollTrigger: {
+          trigger: '.craft-scene-3',
+          start: 'top 60%',
+          end: 'bottom 80%',
+          scrub: true
+        }
+      });
+
+      // Counting up the temperature value from 20°C to 180°C in real-time
+      const tempObj = { value: 20 };
+      const tempValElement = document.querySelector('.temp-value');
+      gsap.to(tempObj, {
+        value: 180,
+        scrollTrigger: {
+          trigger: '.craft-scene-3',
+          start: 'top 60%',
+          end: 'bottom 80%',
+          scrub: true,
+          onUpdate: () => {
+            if (tempValElement) {
+              tempValElement.textContent = Math.round(tempObj.value);
+            }
+          }
+        }
+      });
+
       gsap.to('.craft-bamboo-img', {
         filter: 'drop-shadow(0 0 25px rgba(212,175,55,0.6)) brightness(1.1)',
         scrollTrigger: {
@@ -230,7 +269,7 @@ function Craft() {
             <div className="font-sans" style={{ padding: '20px', border: '1px solid #E5E2DE', borderRadius: '8px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px', color: '#6A6764' }}>
                 <span>Artisan Flame Temperature</span>
-                <span style={{ color: '#5E1914', fontWeight: 'bold' }}>180°C (Active)</span>
+                <span style={{ color: '#5E1914', fontWeight: 'bold' }}><span className="temp-value">20</span>°C (Active)</span>
               </div>
               <div style={{ width: '100%', height: '8px', backgroundColor: '#E5E2DE', borderRadius: '4px', overflow: 'hidden', position: 'relative' }}>
                 <div className="temp-bar-fill" style={{ width: '0%', height: '100%', backgroundColor: '#5E1914', transition: 'width 0.1s linear' }}></div>
@@ -245,10 +284,11 @@ function Craft() {
                 viewBox="0 0 100 100"
                 width="200"
                 height="200"
-                style={{ filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.05))', transition: 'all 0.5s ease' }}
+                style={{ filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.05))' }}
               >
                 <path
-                  d="M 15,90 C 15,20 85,20 85,90"
+                  id="bambooPath"
+                  d="M 15,90 C 15,90 85,90 85,90"
                   fill="none"
                   stroke="#5C4033"
                   strokeWidth="8"
@@ -256,7 +296,8 @@ function Craft() {
                   strokeDasharray="12,1,10,1,15,1"
                 />
                 <path
-                  d="M 15,90 C 15,20 85,20 85,90"
+                  id="bambooGlowPath"
+                  d="M 15,90 C 15,90 85,90 85,90"
                   fill="none"
                   stroke="#D4AF37"
                   strokeWidth="2"
