@@ -1,8 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap, ScrollTrigger } from '../utils/gsap';
 
 function Craft() {
+  const [loupe, setLoupe] = useState({ x: 0, y: 0, active: false });
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setLoupe({ x, y, active: true });
+  };
   useEffect(() => {
     document.title = "Maison Anima — Artisanal Crafts";
     const meta = document.querySelector('meta[name="description"]');
@@ -39,7 +49,21 @@ function Craft() {
             trigger: '.craft-scene-2',
             start: 'top 50%',
             end: 'bottom 40%',
-            scrub: true
+            scrub: true,
+            onUpdate: (self) => {
+              const progress = self.progress;
+              const point = stitchPath.getPointAtLength(progress * length);
+              const needle = document.getElementById('stitchNeedle');
+              if (needle) {
+                if (progress > 0.005 && progress < 0.995) {
+                  needle.style.opacity = '1';
+                } else {
+                  needle.style.opacity = '0';
+                }
+                needle.setAttribute('cx', point.x);
+                needle.setAttribute('cy', point.y);
+              }
+            }
           }
         });
       }
@@ -163,15 +187,21 @@ function Craft() {
             </p>
           </div>
 
-          <div style={{
-            height: '450px',
-            borderRadius: '12px',
-            overflow: 'hidden',
-            position: 'relative',
-            boxShadow: '0 25px 60px rgba(0,0,0,0.04)',
-            backgroundColor: '#B97C52',
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 100%)'
-          }}>
+          <div 
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => setLoupe(prev => ({ ...prev, active: false }))}
+            style={{
+              height: '450px',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              position: 'relative',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.04)',
+              backgroundColor: '#B97C52',
+              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 100%)',
+              cursor: loupe.active ? 'none' : 'default'
+            }}
+          >
             <div style={{
               position: 'absolute',
               top: 0, left: 0, width: '100%', height: '100%',
@@ -200,6 +230,85 @@ function Craft() {
               borderRadius: '50%',
               zIndex: 2
             }} />
+
+            {/* Premium Interactive Loupe Inspector overlay */}
+            {loupe.active && (
+              <>
+                {/* Loupe Circle lens */}
+                <div 
+                  style={{
+                    position: 'absolute',
+                    left: `${loupe.x - 75}px`,
+                    top: `${loupe.y - 75}px`,
+                    width: '150px',
+                    height: '150px',
+                    borderRadius: '50%',
+                    border: '2px solid #D4AF37',
+                    boxShadow: '0 15px 35px rgba(0,0,0,0.3), inset 0 0 15px rgba(0,0,0,0.2)',
+                    overflow: 'hidden',
+                    pointerEvents: 'none',
+                    zIndex: 10,
+                    backgroundColor: '#A66A42',
+                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 100%)'
+                  }}
+                >
+                  <div style={{
+                    position: 'absolute',
+                    top: 0, left: 0, width: '100%', height: '100%',
+                    opacity: 0.28,
+                    backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 100 100\' xmlns=\'https://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.95\' numOctaves=\'5\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")',
+                    transform: 'scale(1.5)',
+                    transformOrigin: 'center'
+                  }} />
+                  <div style={{
+                    position: 'absolute',
+                    top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '110px', height: '110px',
+                    border: '1px solid rgba(212,175,55,0.35)',
+                    borderRadius: '50%'
+                  }} />
+                  <div style={{
+                    position: 'absolute',
+                    top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '10px', height: '10px',
+                    border: '1px solid #D4AF37',
+                    borderRadius: '50%'
+                  }} />
+                </div>
+
+                {/* Floating Analysis HUD tooltip */}
+                <div 
+                  className="font-sans"
+                  style={{
+                    position: 'absolute',
+                    left: `${loupe.x + 90}px`,
+                    top: `${loupe.y - 45}px`,
+                    backgroundColor: 'rgba(28, 27, 26, 0.95)',
+                    color: '#FFFFFF',
+                    padding: '12px 16px',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(212,175,55,0.3)',
+                    zIndex: 11,
+                    fontSize: '0.62rem',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.25)',
+                    pointerEvents: 'none',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    animation: 'slideUpTooltip 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+                  }}
+                >
+                  <span style={{ color: '#D4AF37', fontWeight: 600 }}>Tuscan Grain Inspector</span>
+                  <span>Fiber Density: 98.6%</span>
+                  <span>Imperfections: None</span>
+                  <span style={{ color: '#EDD397' }}>Grade: A+ Selection</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -226,6 +335,8 @@ function Craft() {
               />
               <circle cx="200" cy="150" r="45" fill="#FAF6F0" stroke="#CFAC62" strokeWidth="3" />
               <path d="M 200,120 L 200,180 M 170,150 L 230,150" stroke="#CFAC62" strokeWidth="2.5" />
+              {/* Dynamic sewing needle following stitch path */}
+              <circle id="stitchNeedle" cx="120" cy="40" r="6" fill="#D4AF37" stroke="#1C1B1A" strokeWidth="1.5" style={{ opacity: 0, transition: 'opacity 0.25s' }} />
             </svg>
             <span className="font-sans" style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#6A6764', marginTop: '20px', display: 'block' }}>
               Interactive Double-Needle Saddle Stitch Path
