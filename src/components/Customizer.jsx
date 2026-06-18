@@ -18,9 +18,9 @@ const auraGlowColors = {
 };
 
 const STAMP_LOCATIONS = {
-  strap: { label: 'Center Strap', top: '53.5%', left: '50.3%', zoomX: 0, zoomY: -12 },
-  front: { label: 'Front Panel', top: '65%', left: '50.3%', zoomX: 0, zoomY: -38 },
-  clasp: { label: 'Artisanal Clasp', top: '44%', left: '50.3%', zoomX: 0, zoomY: 10 }
+  strap: { label: 'Center Strap', top: '53.5%', left: '50.3%', zoomX: 0, zoomY: -8 },
+  front: { label: 'Front Panel', top: '65%', left: '50.3%', zoomX: 0, zoomY: -18 },
+  clasp: { label: 'Artisanal Clasp', top: '44%', left: '50.3%', zoomX: 0, zoomY: 4 }
 };
 
 function Customizer() {
@@ -271,6 +271,11 @@ function Customizer() {
           { borderColor: '#E5E2DE', scale: 1, duration: 0.6, ease: 'power2.out' },
           'contactPoint+=0.4'
         );
+
+        // Auto-retract zoom after stamp reveal so user sees the full result
+        tl.call(() => {
+          setIsZoomed(false);
+        }, null, 'contactPoint+=2.0');
       }
     } else {
       setAppliedMonogram('');
