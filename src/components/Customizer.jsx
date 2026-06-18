@@ -59,98 +59,6 @@ function Customizer() {
     }
   };
 
-  const playStampSound = () => {
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      
-      // 1. Clank (metal impact)
-      const osc = ctx.createOscillator();
-      const gainOsc = ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(120, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.15);
-      
-      gainOsc.gain.setValueAtTime(0.3, ctx.currentTime);
-      gainOsc.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
-      
-      osc.connect(gainOsc);
-      gainOsc.connect(ctx.destination);
-      
-      // 2. Hiss (steam release white noise)
-      const bufferSize = ctx.sampleRate * 0.4;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-      
-      const noiseNode = ctx.createBufferSource();
-      noiseNode.buffer = buffer;
-      
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(1200, ctx.currentTime);
-      filter.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.4);
-      
-      const gainNoise = ctx.createGain();
-      gainNoise.gain.setValueAtTime(0.0, ctx.currentTime);
-      gainNoise.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.05);
-      gainNoise.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-      
-      noiseNode.connect(filter);
-      filter.connect(gainNoise);
-      gainNoise.connect(ctx.destination);
-      
-      osc.start();
-      osc.stop(ctx.currentTime + 0.16);
-      
-      noiseNode.start();
-      noiseNode.stop(ctx.currentTime + 0.45);
-    } catch {
-      // ignore context blockers
-    }
-  };
-
-  const createVaporPuffs = (topPercent, leftPercent) => {
-    const container = document.querySelector('.bag-zoom-wrapper > div');
-    if (!container) return;
-
-    for (let i = 0; i < 6; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'vapor-particle';
-      particle.style.position = 'absolute';
-      particle.style.top = topPercent;
-      particle.style.left = leftPercent;
-      particle.style.width = '8px';
-      particle.style.height = '8px';
-
-      const angle = Math.random() * Math.PI * 2;
-      const distance = Math.random() * 8;
-      const startX = Math.cos(angle) * distance;
-      const startY = Math.sin(angle) * distance;
-
-      particle.style.transform = `translate(calc(-50% + ${startX}px), calc(-50% + ${startY}px)) scale(1)`;
-      container.appendChild(particle);
-
-      const driftX = (Math.random() - 0.5) * 30;
-      const driftY = -Math.random() * 40 - 20;
-      const endScale = 3 + Math.random() * 3;
-
-      gsap.to(particle, {
-        x: `+=${driftX}`,
-        y: `+=${driftY}`,
-        scale: endScale,
-        opacity: 0,
-        filter: 'blur(6px)',
-        duration: 0.7 + Math.random() * 0.3,
-        ease: 'power2.out',
-        onComplete: () => particle.remove()
-      });
-    }
-  };
-
   const handleApplyMonogram = () => {
     const val = monogramInput.trim().toUpperCase();
     if (val) {
@@ -160,132 +68,63 @@ function Customizer() {
         onUpdatePrefs({ initials: val, foil, position: stampLocation });
       }
       
+      // Stamp Animation
       if (gsap) {
-        setIsZoomed(true);
 
-        const tl = gsap.timeline();
-
-        // 1. Hide monogram and position plunger off-screen
-        tl.set('.stamping-press-plunger', { y: -300, opacity: 0 });
-        tl.set('.monogram-text-render', { opacity: 0 });
-
-        // 2. Bring plunger down to hover state
-        tl.to('.stamping-press-plunger', {
-          y: -80,
-          opacity: 1,
-          duration: 0.6,
-          ease: 'power2.out'
-        }, 0.15);
-
-        // 3. Slam the press plunger down onto the bag
-        tl.to('.stamping-press-plunger', {
-          y: 0,
-          duration: 0.22,
-          ease: 'power3.in'
-        }, 'contact');
-
-        // Contact label for sync triggers
-        tl.addLabel('contactPoint', 'contact+=0.22');
-
-        // Sound effect trigger
-        tl.call(() => {
-          playStampSound();
-        }, null, 'contactPoint');
-
-        // Vapor puffs trigger
-        tl.call(() => {
-          createVaporPuffs(
-            STAMP_LOCATIONS[stampLocation].top,
-            STAMP_LOCATIONS[stampLocation].left
-          );
-        }, null, 'contactPoint');
-
-        // Stage Shake
-        tl.to('.preview-stage', {
-          x: '+=5px',
-          y: '+=3px',
-          duration: 0.04,
-          yoyo: true,
-          repeat: 6,
-          ease: 'power1.inOut'
-        }, 'contactPoint');
-
-        // Bag Squish/Compression
-        tl.to('.bag-zoom-wrapper', {
-          scaleY: 0.96,
-          duration: 0.08,
-          yoyo: true,
-          repeat: 1,
-          ease: 'power1.inOut'
-        }, 'contactPoint');
-
-        // Landing flash
-        tl.fromTo('.preview-stage', 
-          { filter: 'brightness(1.4) contrast(0.95)' },
-          { filter: 'brightness(1) contrast(1)', duration: 0.8, ease: 'power2.out' },
-          'contactPoint'
+        // 1. Hot stamp landing flash on stage
+        gsap.fromTo('.preview-stage', 
+          { filter: 'brightness(1.5) contrast(0.95)' },
+          { filter: 'brightness(1) contrast(1)', duration: 0.8, ease: 'power2.out' }
         );
 
-        // Reveal hot red-glowing monogram text
-        tl.fromTo('.monogram-text-render',
-          {
-            color: '#FF4500',
-            textShadow: '0 0 10px #FF4500, 0 0 20px #FF8C00, 0 0 35px #FF0000',
+        // 2. Monogram text slams down with 3D scale impact
+        gsap.fromTo('.monogram-text-render',
+          { scale: 3.5, opacity: 0, filter: 'blur(4px)' },
+          { scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.6, ease: 'back.out(2)' }
+        );
+
+        // 3. Steam puff effect
+        const stage = document.querySelector('.preview-stage');
+        if (stage) {
+          const puff = document.createElement('div');
+          puff.className = 'steam-puff';
+          puff.style.position = 'absolute';
+          puff.style.top = STAMP_LOCATIONS[stampLocation].top;
+          puff.style.left = STAMP_LOCATIONS[stampLocation].left;
+          puff.style.width = '10px';
+          puff.style.height = '10px';
+          puff.style.borderRadius = '50%';
+          puff.style.background = 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(212,175,55,0) 70%)';
+          puff.style.transform = 'translate(-50%, -50%)';
+          puff.style.zIndex = '5';
+          stage.appendChild(puff);
+
+          gsap.to(puff, {
+            width: '120px',
+            height: '120px',
             opacity: 0,
-            scale: 0.9
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 0.04
-          },
-          'contactPoint'
+            duration: 0.8,
+            onComplete: () => puff.remove()
+          });
+        }
+
+        // 4. Subtle shake on the bag wrapper representing stamping impact
+        gsap.fromTo('.bag-zoom-wrapper',
+          { y: '+=3px', rotate: 0.5 },
+          { y: '0px', rotate: 0, duration: 0.35, ease: 'elastic.out(1, 0.3)' }
         );
 
-        // Dwell vibration
-        tl.to('.stamping-press-plunger', {
-          y: '+=0.8px',
-          duration: 0.12,
-          yoyo: true,
-          repeat: 1
-        }, 'contactPoint');
-
-        // Lift plunger back up out of sight
-        tl.to('.stamping-press-plunger', {
-          y: -350,
-          opacity: 0,
-          duration: 0.7,
-          ease: 'power3.inOut'
-        }, 'contactPoint+=0.3');
-
-        // Monogram cools down to its final finish
-        tl.to('.monogram-text-render', {
-          clearProps: 'color,textShadow',
-          duration: 1.4,
-          ease: 'power2.out'
-        }, 'contactPoint+=0.3');
-
-        // Flash input field border
-        tl.fromTo('#monogramInput', 
+        // 5. Monogram input flash
+        gsap.fromTo('#monogramInput', 
           { borderColor: '#B97C52', scale: 1.02 },
-          { borderColor: '#E5E2DE', scale: 1, duration: 0.6, ease: 'power2.out' },
-          'contactPoint+=0.4'
+          { borderColor: '#E5E2DE', scale: 1, duration: 0.6, ease: 'power2.out' }
         );
-
-        // Auto-retract zoom after stamp reveal so user sees the full result
-        tl.call(() => {
-          setIsZoomed(false);
-        }, null, 'contactPoint+=2.0');
       }
     } else {
       setAppliedMonogram('');
       setIsStamped(false);
       if (onUpdatePrefs) {
         onUpdatePrefs({ initials: '', foil, position: stampLocation });
-      }
-      if (gsap) {
-        gsap.killTweensOf('.monogram-text-render');
-        gsap.set('.monogram-text-render', { clearProps: 'all' });
       }
     }
   };
@@ -373,53 +212,28 @@ function Customizer() {
                   ))}
 
                   {/* Stamped Monogram Overlay */}
-                  <div
-                    className={`monogram-text-render ${foil === 'gold' ? 'monogram-gold' : 'monogram-blind-' + color}`}
-                    style={{
-                      position: 'absolute',
-                      top: STAMP_LOCATIONS[stampLocation].top,
-                      left: STAMP_LOCATIONS[stampLocation].left,
-                      transform: 'translate(-50%, -50%)',
-                      zIndex: 4,
-                      fontFamily: 'var(--font-serif)',
-                      fontSize: isZoomed ? '0.72rem' : '0.4rem',
-                      letterSpacing: '0.12em',
-                      fontWeight: 600,
-                      pointerEvents: 'none',
-                      textTransform: 'uppercase',
-                      whiteSpace: 'nowrap',
-                      opacity: appliedMonogram ? 1 : 0,
-                      transition: 'top 0.6s cubic-bezier(0.16, 1, 0.3, 1), left 0.6s cubic-bezier(0.16, 1, 0.3, 1), font-size 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
-                    }}
-                  >
-                    {appliedMonogram || ' '}
-                  </div>
-
-                  {/* Stamping Press Plunger */}
-                  <div
-                    className="stamping-press-plunger"
-                    style={{
-                      position: 'absolute',
-                      top: STAMP_LOCATIONS[stampLocation].top,
-                      left: STAMP_LOCATIONS[stampLocation].left,
-                      transform: 'translate(-50%, -100%)',
-                      zIndex: 10,
-                      pointerEvents: 'none',
-                      opacity: 0,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      transition: 'top 0.6s cubic-bezier(0.16, 1, 0.3, 1), left 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
-                    }}
-                  >
-                    <div className="press-shaft"></div>
-                    <div className="press-block">
-                      <span className="press-temp">180°C</span>
+                  {appliedMonogram && (
+                    <div
+                      className={`monogram-text-render ${foil === 'gold' ? 'monogram-gold' : 'monogram-blind-' + color}`}
+                      style={{
+                        position: 'absolute',
+                        top: STAMP_LOCATIONS[stampLocation].top,
+                        left: STAMP_LOCATIONS[stampLocation].left,
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 4,
+                        fontFamily: 'var(--font-serif)',
+                        fontSize: isZoomed ? '0.72rem' : '0.4rem',
+                        letterSpacing: '0.12em',
+                        fontWeight: 600,
+                        pointerEvents: 'none',
+                        textTransform: 'uppercase',
+                        whiteSpace: 'nowrap',
+                        transition: 'top 0.6s cubic-bezier(0.16, 1, 0.3, 1), left 0.6s cubic-bezier(0.16, 1, 0.3, 1), font-size 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+                      }}
+                    >
+                      {appliedMonogram}
                     </div>
-                    <div className="press-head">
-                      <span className="press-text-mirror">{monogramInput.trim() || 'A.S.'}</span>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
 
