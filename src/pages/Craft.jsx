@@ -147,9 +147,37 @@ function Craft() {
         { scaleY: 0.96, duration: 0.2, ease: 'power2.out' },
         '-=0.2'
       );
+      // Heat/pressure glow flash around leather backing on impact
+      stampTimeline.fromTo('.craft-leather-backing',
+        { boxShadow: '0 8px 20px rgba(0,0,0,0.06)' },
+        { boxShadow: '0 0 35px rgba(212,175,55,0.45)', duration: 0.15, yoyo: true, repeat: 1 },
+        '-=0.2'
+      );
+      // Expand and rise of steam puffs on impact
+      stampTimeline.fromTo('.craft-steam-puff',
+        { scale: 1, opacity: 0, y: 0, x: 0 },
+        {
+          scale: 6,
+          opacity: 0.65,
+          y: -20,
+          x: (i) => i === 0 ? -35 : 35, // Left puff moves left, right puff moves right
+          duration: 0.5,
+          ease: 'power1.out'
+        },
+        '-=0.2'
+      );
+      // Fade out steam
+      stampTimeline.to('.craft-steam-puff', {
+        opacity: 0,
+        scale: 9,
+        y: -30,
+        duration: 0.3,
+        ease: 'power1.in'
+      }, '-=0.1');
       stampTimeline.fromTo('.craft-gold-imprint',
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out' }
+        { opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out' },
+        '-=0.3'
       );
     }
   }, []);
@@ -433,6 +461,34 @@ function Craft() {
             <div style={{ position: 'absolute', top: '20px', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#6A6764' }} className="font-sans">
               Hot Brass Emboss Simulation
             </div>
+
+            {/* Steam/smoke puff elements */}
+            <div className="craft-steam-puff puff-left" style={{
+              position: 'absolute',
+              width: '12px',
+              height: '12px',
+              backgroundColor: 'rgba(230, 225, 220, 0.7)',
+              borderRadius: '50%',
+              top: '202px', // sitting exactly at the stamp impact line
+              left: 'calc(50% - 60px)',
+              filter: 'blur(4px)',
+              opacity: 0,
+              pointerEvents: 'none',
+              zIndex: 2
+            }}></div>
+            <div className="craft-steam-puff puff-right" style={{
+              position: 'absolute',
+              width: '12px',
+              height: '12px',
+              backgroundColor: 'rgba(230, 225, 220, 0.7)',
+              borderRadius: '50%',
+              top: '202px',
+              left: 'calc(50% + 48px)',
+              filter: 'blur(4px)',
+              opacity: 0,
+              pointerEvents: 'none',
+              zIndex: 2
+            }}></div>
 
             <div className="craft-stamp-block" style={{
               width: '180px',
