@@ -199,7 +199,11 @@ function Craft() {
               boxShadow: '0 25px 60px rgba(0,0,0,0.04)',
               backgroundColor: '#B97C52',
               backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 100%)',
-              cursor: loupe.active ? 'none' : 'default'
+              cursor: loupe.active ? 'none' : 'default',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              msUserSelect: 'none',
+              MozUserSelect: 'none'
             }}
           >
             <div style={{
