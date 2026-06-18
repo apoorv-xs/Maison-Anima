@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX, Grid, Eye, EyeOff } from 'lucide-react';
+import { Volume2, VolumeX, Grid } from 'lucide-react';
 
 function BoutiqueControls() {
   const [isAudioActive, setIsAudioActive] = useState(false);
@@ -138,10 +138,10 @@ function BoutiqueControls() {
     if (clickIntervalRef.current) clearInterval(clickIntervalRef.current);
     
     if (noiseNodeRef.current) {
-      try { noiseNodeRef.current.stop(); } catch {}
+      try { noiseNodeRef.current.stop(); } catch { /* ignore */ }
     }
     if (audioCtxRef.current) {
-      try { audioCtxRef.current.close(); } catch {}
+      try { audioCtxRef.current.close(); } catch { /* ignore */ }
     }
   };
 

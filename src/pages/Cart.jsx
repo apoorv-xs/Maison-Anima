@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
 import CartItem from '../components/CartItem';
 import GiftWrapping from '../components/GiftWrapping';
 import CloudSync from '../components/CloudSync';
@@ -9,7 +8,6 @@ import CheckoutForm from '../components/CheckoutForm';
 
 function Cart() {
   const { cart, removeItem, updateQuantity } = useCart();
-  const { checkoutStep } = useAuth();
   const [giftWrapping, setGiftWrapping] = useState('signature');
   const [isGift, setIsGift] = useState(false);
   const [giftNote, setGiftNote] = useState('');

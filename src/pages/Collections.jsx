@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Editorial from '../components/Editorial';
-import { gsap, ScrollTrigger } from '../utils/gsap';
+import { gsap } from '../utils/gsap';
 
 function Collections() {
   useEffect(() => {

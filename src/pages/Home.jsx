@@ -3,11 +3,9 @@ import Hero from '../components/Hero';
 import Editorial from '../components/Editorial';
 import Customizer from '../components/Customizer';
 import Quote from '../components/Quote';
-import { useMonogram } from '../context/MonogramContext';
-import { gsap, ScrollTrigger } from '../utils/gsap';
+import { gsap } from '../utils/gsap';
 
 function Home() {
-  const { monogramPrefs, updatePrefs } = useMonogram();
   useEffect(() => {
     if (gsap) {
       // Hero Entry

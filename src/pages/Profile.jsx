@@ -339,7 +339,7 @@ function Profile() {
                           try {
                             await navigator.clipboard.writeText(url);
                             alert(`Registry share link copied to clipboard: ${url}`);
-                          } catch (e) {
+                          } catch {
                             window.prompt('Copy this link:', url);
                           }
                         }}

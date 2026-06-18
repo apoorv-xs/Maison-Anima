@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { INACTIVITY_TIMEOUT_MS } from '../utils/constants';
 
 /**
@@ -6,10 +6,6 @@ import { INACTIVITY_TIMEOUT_MS } from '../utils/constants';
  * Resets on mousemove, keydown, click, scroll, touchstart.
  */
 export function useInactivity(onTimeout) {
-  const resetTimer = useCallback(() => {
-    // This function is stable reference-wise but we use a ref pattern via closure
-    return onTimeout;
-  }, [onTimeout]);
 
   useEffect(() => {
     if (!onTimeout) return;

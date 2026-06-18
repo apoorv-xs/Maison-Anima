@@ -58,7 +58,7 @@ function CloudSync({ giftNote, giftWrapping }) {
                 const url = `${window.location.origin}/registry/${syncToken}`;
                 try {
                   await navigator.clipboard.writeText(url);
-                } catch (e) {
+                } catch {
                   // Fallback: select text for manual copy
                   window.prompt('Copy this link:', url);
                 }

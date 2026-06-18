@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { gsap, ScrollTrigger } from '../utils/gsap';
+import { gsap } from '../utils/gsap';
 
 function Craft() {
   const [loupe, setLoupe] = useState({ x: 0, y: 0, active: false });

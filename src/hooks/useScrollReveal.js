@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { gsap, ScrollTrigger } from '../utils/gsap';
+import { gsap } from '../utils/gsap';
 
 /**
  * Animate elements with class `selector` on scroll.
@@ -37,5 +37,6 @@ export function useScrollReveal(selector, opts = {}) {
       animations.forEach((a) => a.scrollTrigger?.kill());
       animations.forEach((a) => a.kill());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selector, trigger, start, duration, ease, toggleActions, JSON.stringify(from), JSON.stringify(to)]);
 }

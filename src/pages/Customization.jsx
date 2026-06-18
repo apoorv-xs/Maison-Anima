@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Customizer from '../components/Customizer';
-import { gsap, ScrollTrigger } from '../utils/gsap';
+import { gsap } from '../utils/gsap';
 
 function Customization() {
   useEffect(() => {

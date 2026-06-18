@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider, useCart } from './context/CartContext';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { MonogramProvider, useMonogram } from './context/MonogramContext';
+import { AuthProvider } from './context/AuthContext';
+import { MonogramProvider } from './context/MonogramContext';
 import { useScrollPosition } from './hooks/useScrollPosition';
 import { gsap } from './utils/gsap';
 import Ribbon from './components/Ribbon';
@@ -74,7 +74,6 @@ function RouteTransition() {
 // Inner app shell — consumes contexts
 function AppShell() {
   const { totalItemsCount } = useCart();
-  const { currentUser } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBagOpen, setIsBagOpen] = useState(false);
   const isScrolled = useScrollPosition(50);

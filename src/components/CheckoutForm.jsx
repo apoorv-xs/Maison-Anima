@@ -3,7 +3,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
 function CheckoutForm({ subtotal, onCheckoutComplete }) {
-  const { cart, clearCart } = useCart();
+  const { cart } = useCart();
   const { checkoutSuccess } = useAuth();
   const [name, setName] = React.useState('');
   const [address, setAddress] = React.useState('');
