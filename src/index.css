@@ -1043,26 +1043,26 @@ a {
         display: inline-block !important;
     }
     .header-container {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
         padding: 16px 20px;
     }
     .brand-logo {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 1.4rem !important;
-        letter-spacing: 0.3em !important;
-        margin-left: 0 !important;
+        font-size: 1.3rem !important;
+        letter-spacing: 0.25em !important;
+        margin-left: 0.25em !important;
+        text-align: center;
+    }
+    .nav-item {
+        font-size: 0.65rem !important;
+        letter-spacing: 0.12em !important;
     }
     .nav-right {
-        gap: 16px !important;
+        gap: 10px !important;
     }
     .nav-left {
-        gap: 16px !important;
+        gap: 10px !important;
     }
     .hero-title {
         font-size: 3.2rem;
