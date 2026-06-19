@@ -156,6 +156,7 @@ a {
     transition: var(--transition-smooth);
     display: inline-block;
     text-align: left;
+    white-space: nowrap;
 }
 
 .nav-item br {
@@ -1042,12 +1043,20 @@ a {
         display: inline-block !important;
     }
     .header-container {
-        padding: 20px;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
     }
     .brand-logo {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         font-size: 1.4rem !important;
         letter-spacing: 0.3em !important;
-        margin-left: 0.3em !important;
+        margin-left: 0 !important;
     }
     .nav-right {
         gap: 16px !important;
