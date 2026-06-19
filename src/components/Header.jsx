@@ -63,12 +63,16 @@ function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled }) {
               className="nav-item"
               style={{ fontSize: '0.72rem', letterSpacing: '0.22em', textTransform: 'uppercase' }}
             >
-              Sign In
+              <span className="desktop-only">Sign In</span>
+              <span className="mobile-only">Login</span>
             </Link>
           )}
 
           <button className="nav-item nav-btn bag-btn" id="bagBtn" onClick={onBagOpen}>
-            <span className="btn-text">Anima Bag</span>
+            <span className="btn-text">
+              <span className="desktop-only">Anima Bag</span>
+              <span className="mobile-only">Bag</span>
+            </span>
             <span className="bag-count" id="bagCount" aria-live="polite" aria-label={`${bagCount} items in bag`} style={{ marginLeft: '8px' }}>{bagCount}</span>
           </button>
         </div>

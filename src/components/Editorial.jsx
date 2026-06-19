@@ -45,15 +45,7 @@ function Editorial() {
         </div>
 
         {/* Dynamic Category Filters */}
-        <div 
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '16px',
-            marginBottom: '60px'
-          }}
-          className="font-sans"
-        >
+        <div className="category-filters-container font-sans">
           {['All', 'Bags', 'Footwear', 'Accessories'].map((cat) => (
             <button
               key={cat}
@@ -68,6 +60,7 @@ function Editorial() {
                 textTransform: 'uppercase',
                 letterSpacing: '0.15em',
                 fontWeight: 500,
+                flexShrink: 0,
                 transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
             >

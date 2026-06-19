@@ -1045,7 +1045,15 @@ a {
         padding: 20px;
     }
     .brand-logo {
-        font-size: 1.8rem;
+        font-size: 1.4rem !important;
+        letter-spacing: 0.3em !important;
+        margin-left: 0.3em !important;
+    }
+    .nav-right {
+        gap: 16px !important;
+    }
+    .nav-left {
+        gap: 16px !important;
     }
     .hero-title {
         font-size: 3.2rem;
@@ -1402,6 +1410,37 @@ a {
     .gifting-options-layout {
         grid-template-columns: 1fr;
         gap: 15px;
+    }
+}
+
+.category-filters-container {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 60px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.category-filters-container::-webkit-scrollbar {
+    display: none;
+}
+
+.category-filters-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@media (max-width: 768px) {
+    .category-filters-container {
+        justify-content: flex-start;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-left: -20px;
+        width: calc(100% + 40px);
     }
 }
 
