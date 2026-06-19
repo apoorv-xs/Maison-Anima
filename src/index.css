@@ -1387,10 +1387,34 @@ a {
     position: relative;
 }
 
+.journal-entry-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.craft-layout-1 {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.craft-layout-2 {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
 @media (max-width: 991px) {
     .registry-layout,
     .profile-layout,
-    .cart-layout {
+    .cart-layout,
+    .journal-entry-layout,
+    .craft-layout-1,
+    .craft-layout-2 {
         grid-template-columns: 1fr;
         gap: 40px;
     }

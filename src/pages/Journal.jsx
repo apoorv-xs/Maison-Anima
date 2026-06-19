@@ -111,7 +111,7 @@ function Journal() {
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: '120px' }}>
           {lookbookEntries.map((entry) => (
-            <div key={entry.id} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '60px', alignItems: 'center' }}>
+            <div key={entry.id} className="journal-entry-layout">
               
               {/* Left Side: Interactive Parallax Hotspot Frame */}
               <div 

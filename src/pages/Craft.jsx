@@ -199,7 +199,7 @@ function Craft() {
 
       {/* Scene 1 */}
       <section className="craft-scene-1" style={{ minHeight: '80vh', padding: '100px 0', borderTop: '1px solid #E5E2DE', display: 'flex', alignItems: 'center' }}>
-        <div className="section-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '80px', alignItems: 'center' }}>
+        <div className="section-container craft-layout-1">
           <div className="craft-desc-1">
             <span style={{ fontSize: '0.75rem', color: '#B97C52', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '16px' }} className="font-sans">
               Capitolo Primo
@@ -347,7 +347,7 @@ function Craft() {
 
       {/* Scene 2 */}
       <section className="craft-scene-2" style={{ minHeight: '80vh', padding: '100px 0', backgroundColor: '#F8F5F0', borderTop: '1px solid #E5E2DE', display: 'flex', alignItems: 'center' }}>
-        <div className="section-container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '80px', alignItems: 'center' }}>
+        <div className="section-container craft-layout-2">
           <div style={{ textAlign: 'center', backgroundColor: '#FFFFFF', padding: '40px', borderRadius: '12px', border: '1px solid #E5E2DE', boxShadow: '0 20px 40px rgba(0,0,0,0.02)' }}>
             <svg viewBox="0 0 400 300" width="100%" height="260">
               <path
@@ -394,7 +394,7 @@ function Craft() {
 
       {/* Scene 3 */}
       <section className="craft-scene-3" style={{ minHeight: '80vh', padding: '100px 0', borderTop: '1px solid #E5E2DE', display: 'flex', alignItems: 'center' }}>
-        <div className="section-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '80px', alignItems: 'center' }}>
+        <div className="section-container craft-layout-1">
           <div>
             <span style={{ fontSize: '0.75rem', color: '#B97C52', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '16px' }} className="font-sans">
               Capitolo Terzo
@@ -456,7 +456,7 @@ function Craft() {
 
       {/* Scene 4 */}
       <section className="craft-scene-4" style={{ minHeight: '90vh', padding: '100px 0', backgroundColor: '#F8F5F0', borderTop: '1px solid #E5E2DE', display: 'flex', alignItems: 'center' }}>
-        <div className="section-container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '80px', alignItems: 'center' }}>
+        <div className="section-container craft-layout-2">
           <div style={{ position: 'relative', height: '400px', backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E2DE', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <div style={{ position: 'absolute', top: '20px', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#6A6764' }} className="font-sans">
               Hot Brass Emboss Simulation
