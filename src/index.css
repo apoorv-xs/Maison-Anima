@@ -1408,6 +1408,23 @@ a {
     align-items: center;
 }
 
+.craft-heading {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 400;
+    margin-bottom: 24px;
+    line-height: 1.2;
+    color: var(--text-dark);
+}
+
+.journal-heading {
+    font-family: var(--font-serif);
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: var(--text-dark);
+    line-height: 1.2;
+}
+
 @media (max-width: 991px) {
     .registry-layout,
     .profile-layout,
@@ -1418,9 +1435,29 @@ a {
         grid-template-columns: 1fr;
         gap: 40px;
     }
+    
+    /* Ensure narrative text comes first, then interactive/animation elements on mobile collapse */
+    .journal-entry-layout > *:nth-child(1),
+    .craft-layout-2 > *:nth-child(1) {
+        order: 2;
+    }
+    
+    .journal-entry-layout > *:nth-child(2),
+    .craft-layout-2 > *:nth-child(2) {
+        order: 1;
+    }
 }
 
 @media (max-width: 768px) {
+    .section-container {
+        padding: 0 20px;
+    }
+    .craft-heading {
+        font-size: 2.1rem;
+    }
+    .journal-heading {
+        font-size: 1.8rem;
+    }
     .product-modal-layout {
         grid-template-columns: 1fr;
     }

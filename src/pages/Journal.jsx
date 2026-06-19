@@ -200,7 +200,7 @@ function Journal() {
                 <span className="font-sans text-xs uppercase tracking-widest text-muted" style={{ fontSize: '0.75rem', letterSpacing: '0.2em' }}>
                   {entry.tag}
                 </span>
-                <h3 className="font-serif" style={{ fontSize: '2.4rem', fontWeight: 400, color: '#1C1B1A', lineHeight: '1.2' }}>
+                <h3 className="journal-heading">
                   {entry.title}
                 </h3>
                 <p className="product-description" style={{ fontSize: '0.95rem', lineHeight: '1.8' }}>

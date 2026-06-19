@@ -204,7 +204,7 @@ function Craft() {
             <span style={{ fontSize: '0.75rem', color: '#B97C52', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '16px' }} className="font-sans">
               Capitolo Primo
             </span>
-            <h2 className="font-serif" style={{ fontSize: '2.8rem', fontWeight: 400, marginBottom: '24px', lineHeight: '1.2' }}>
+            <h2 className="craft-heading">
               Sorting the Tuscan Hide
             </h2>
             <p className="product-description" style={{ fontSize: '0.98rem', lineHeight: '1.9', color: '#6A6764', marginBottom: '20px' }}>
@@ -349,7 +349,7 @@ function Craft() {
       <section className="craft-scene-2" style={{ minHeight: '80vh', padding: '100px 0', backgroundColor: '#F8F5F0', borderTop: '1px solid #E5E2DE', display: 'flex', alignItems: 'center' }}>
         <div className="section-container craft-layout-2">
           <div style={{ textAlign: 'center', backgroundColor: '#FFFFFF', padding: '40px', borderRadius: '12px', border: '1px solid #E5E2DE', boxShadow: '0 20px 40px rgba(0,0,0,0.02)' }}>
-            <svg viewBox="0 0 400 300" width="100%" height="260">
+            <svg viewBox="0 0 400 300" style={{ width: '100%', height: 'auto', maxHeight: '260px' }}>
               <path
                 d="M 120,40 L 280,40 C 300,40 300,260 280,260 L 120,260 C 100,260 100,40 120,40 Z"
                 fill="none"
@@ -379,7 +379,7 @@ function Craft() {
             <span style={{ fontSize: '0.75rem', color: '#B97C52', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '16px' }} className="font-sans">
               Capitolo Secondo
             </span>
-            <h2 className="font-serif" style={{ fontSize: '2.8rem', fontWeight: 400, marginBottom: '24px', lineHeight: '1.2' }}>
+            <h2 className="craft-heading">
               The Dual Saddle-Stitch
             </h2>
             <p className="product-description" style={{ fontSize: '0.98rem', lineHeight: '1.9', color: '#6A6764', marginBottom: '20px' }}>
@@ -399,7 +399,7 @@ function Craft() {
             <span style={{ fontSize: '0.75rem', color: '#B97C52', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '16px' }} className="font-sans">
               Capitolo Terzo
             </span>
-            <h2 className="font-serif" style={{ fontSize: '2.8rem', fontWeight: 400, marginBottom: '24px', lineHeight: '1.2' }}>
+            <h2 className="craft-heading">
               Thermo-Bended Bamboo
             </h2>
             <p className="product-description" style={{ fontSize: '0.98rem', lineHeight: '1.9', color: '#6A6764', marginBottom: '20px' }}>
@@ -538,7 +538,7 @@ function Craft() {
             <span style={{ fontSize: '0.75rem', color: '#B97C52', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '16px' }} className="font-sans">
               Capitolo Quarto
             </span>
-            <h2 className="font-serif" style={{ fontSize: '2.8rem', fontWeight: 400, marginBottom: '24px', lineHeight: '1.2' }}>
+            <h2 className="craft-heading">
               The Hot Brass Stamp
             </h2>
             <p className="product-description" style={{ fontSize: '0.98rem', lineHeight: '1.9', color: '#6A6764', marginBottom: '20px' }}>
