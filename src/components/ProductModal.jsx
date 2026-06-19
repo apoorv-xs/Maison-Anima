@@ -53,21 +53,13 @@ function ProductModal({ product, onClose }) {
         maxWidth: '900px',
         maxHeight: '90vh',
         overflowY: 'auto',
-        display: 'grid',
-        gridTemplateColumns: '1.1fr 1fr',
         boxShadow: '0 30px 80px rgba(0, 0, 0, 0.15)',
         animation: 'modalFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
-      }}>
+      }}
+      className="product-modal-layout"
+      >
         {/* Left Side: Product Image */}
-        <div style={{
-          backgroundColor: '#F6F3EF',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '40px',
-          borderRight: '1px solid #E5E2DE',
-          position: 'relative'
-        }}>
+        <div className="product-modal-image-container">
           <img 
             src={product.image} 
             alt={product.name} 

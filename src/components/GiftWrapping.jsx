@@ -9,7 +9,7 @@ function GiftWrapping({ giftWrapping, setGiftWrapping, isGift, setIsGift, giftNo
       </span>
       <h3 className="font-serif" style={{ fontSize: '1.6rem', fontWeight: 400, marginBottom: '20px' }}>Maison Gifting & Packaging</h3>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '30px' }} className="font-sans">
+      <div className="gifting-options-layout font-sans">
         <div
           onClick={() => setGiftWrapping('signature')}
           style={{

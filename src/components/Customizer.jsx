@@ -390,7 +390,8 @@ function Customizer() {
                   maxLength={4} 
                   value={monogramInput}
                   onChange={(e) => {
-                    setMonogramInput(e.target.value);
+                    const filtered = e.target.value.replace(/[^a-zA-Z.\s]/g, '');
+                    setMonogramInput(filtered);
                     setIsStamped(false); // require user to hit stamp again to see impact
                   }}
                   style={{ 

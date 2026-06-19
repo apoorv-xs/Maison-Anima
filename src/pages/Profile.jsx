@@ -70,7 +70,7 @@ function Profile() {
           <div className="divider"></div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '60px', alignItems: 'start' }}>
+        <div className="profile-layout">
           
           {/* Left Column: Member ID Card and Preferences */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>

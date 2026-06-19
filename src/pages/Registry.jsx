@@ -176,7 +176,7 @@ function Registry() {
           <div className="divider"></div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '60px', alignItems: 'start' }}>
+        <div className="registry-layout">
           
           {/* Left Column: Shared Items and Guestbook */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>

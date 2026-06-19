@@ -64,7 +64,7 @@ function Cart() {
             </Link>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '60px', alignItems: 'start' }}>
+          <div className="cart-layout">
             {/* Left Column */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
               {/* Items List */}
