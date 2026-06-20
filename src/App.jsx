@@ -119,6 +119,19 @@ function AppShell() {
     }
   }, [isMenuOpen, isBagOpen]);
 
+  // Lock body scroll when drawers are open
+  useEffect(() => {
+    const anyOpen = isMenuOpen || isBagOpen;
+    if (anyOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen, isBagOpen]);
+
   // GSAP Header Animations
   useEffect(() => {
     if (gsap) {

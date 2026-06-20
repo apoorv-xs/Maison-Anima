@@ -5,6 +5,13 @@ function ProductModal({ product, onClose }) {
   const { addToCart } = useCart();
   const [activeTab, setActiveTab] = useState('story'); // story | details | packaging
 
+  React.useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   if (!product) return null;
 
   const handleAdd = () => {
