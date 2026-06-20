@@ -20,7 +20,7 @@ function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled }) {
 
         <Link to="/" className="brand-logo">ANIMA</Link>
 
-        <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
+        <div className="nav-right">
           {currentUser ? (
             <Link
               to="/profile"
