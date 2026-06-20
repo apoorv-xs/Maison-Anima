@@ -123,12 +123,15 @@ function AppShell() {
   useEffect(() => {
     const anyOpen = isMenuOpen || isBagOpen;
     if (anyOpen) {
-      document.body.style.overflow = 'hidden';
+      document.documentElement.classList.add('drawer-open');
+      document.body.classList.add('drawer-open');
     } else {
-      document.body.style.overflow = '';
+      document.documentElement.classList.remove('drawer-open');
+      document.body.classList.remove('drawer-open');
     }
     return () => {
-      document.body.style.overflow = '';
+      document.documentElement.classList.remove('drawer-open');
+      document.body.classList.remove('drawer-open');
     };
   }, [isMenuOpen, isBagOpen]);
 
