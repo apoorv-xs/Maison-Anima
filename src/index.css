@@ -188,6 +188,12 @@ a {
     background-color: var(--accent-siena);
 }
 
+.brand-logo-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .brand-logo {
     font-family: var(--font-serif);
     font-size: 2.1rem;
@@ -1052,17 +1058,29 @@ a {
         padding: 16px 20px;
         position: relative;
     }
-    .brand-logo {
+    .brand-logo-wrapper {
         position: absolute;
-        left: 0;
-        right: 0;
-        margin: 0 auto;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
         width: max-content;
-        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+    }
+    .brand-logo {
         font-size: 1.3rem !important;
         letter-spacing: 0.25em !important;
         padding-left: 0.25em;
         margin-left: 0 !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        transform: none !important;
+        pointer-events: auto;
     }
     .nav-item {
         font-size: 0.65rem !important;

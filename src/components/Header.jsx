@@ -18,7 +18,9 @@ function Header({ bagCount, onMenuOpen, onBagOpen, isScrolled }) {
           <NavLink to="/journal" className="nav-item desktop-only">Journal</NavLink>
         </div>
 
-        <Link to="/" className="brand-logo">ANIMA</Link>
+        <div className="brand-logo-wrapper">
+          <Link to="/" className="brand-logo">ANIMA</Link>
+        </div>
 
         <div className="nav-right">
           {currentUser ? (
