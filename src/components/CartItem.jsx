@@ -18,7 +18,7 @@ function CartItem({ item, index, onRemove, onUpdateQuantity, compact = false }) 
         <div className="cart-item-details">
           <h4 className="cart-item-name">{item.name}</h4>
           <p className="cart-item-meta">{metaText}</p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: '8px', flexWrap: 'wrap', gap: '8px' }}>
             <span className="cart-item-price">
               ${(item.price * item.quantity).toLocaleString()}
               {item.quantity > 1 && (
@@ -36,9 +36,9 @@ function CartItem({ item, index, onRemove, onUpdateQuantity, compact = false }) 
 
   // Full cart page style (with quantity controls)
   return (
-    <div style={{ display: 'flex', gap: '20px', alignItems: 'center', borderBottom: '1px solid #E5E2DE', paddingBottom: '20px' }}>
-      <img src={item.image} alt={item.name} style={{ width: '90px', height: '90px', objectFit: 'cover', borderRadius: '8px', backgroundColor: '#F6F3EF' }} loading="lazy" />
-      <div style={{ flexGrow: 1 }}>
+    <div className="cart-item-row">
+      <img src={item.image} alt={item.name} className="cart-item-row-img" loading="lazy" />
+      <div className="cart-item-row-details">
         <h4 className="font-serif" style={{ fontSize: '1.1rem', fontWeight: 500, color: '#1C1B1A', marginBottom: '4px' }}>{item.name}</h4>
         <p className="font-sans text-muted" style={{ fontSize: '0.7rem', color: '#6A6764', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>{metaText}</p>
 

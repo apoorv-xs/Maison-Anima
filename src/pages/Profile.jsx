@@ -133,7 +133,7 @@ function Profile() {
                 </div>
               </div>
 
-              <div style={{ borderTop: '1px solid rgba(229, 226, 222, 0.15)', paddingTop: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }} className="font-sans">
+              <div className="profile-card-details-grid font-sans">
                 <div>
                   <span style={{ fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#9A9895', display: 'block', marginBottom: '4px' }}>Client Level</span>
                   <span style={{ fontSize: '0.78rem', color: '#D4AF37', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>⚜ {currentUser.tier}</span>
@@ -273,7 +273,7 @@ function Profile() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                   {userOrders.map((order) => (
                     <div key={order.id} style={{ borderBottom: '1px solid #E5E2DE', paddingBottom: '24px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px' }} className="font-sans">
+                      <div className="acquisition-log-header font-sans">
                         <div>
                           <span style={{ fontSize: '0.78rem', fontWeight: 500, color: '#1C1B1A' }}>{order.id}</span>
                           <span style={{ fontSize: '0.75rem', color: '#6A6764', marginLeft: '12px' }}>{order.date}</span>
@@ -285,7 +285,7 @@ function Profile() {
                       
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {order.items.map((item, idx) => (
-                          <div key={idx} style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                          <div key={idx} className="wardrobe-item-row">
                             <img src={item.image} alt={item.name} style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '6px', backgroundColor: '#F6F3EF' }} />
                             <div style={{ flexGrow: 1 }} className="font-sans">
                               <h5 className="font-serif" style={{ fontSize: '0.98rem', fontWeight: 500, color: '#1C1B1A', margin: 0 }}>{item.name}</h5>
@@ -324,7 +324,7 @@ function Profile() {
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }} className="font-sans">
                   {registryTokens.map((t, idx) => (
-                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', border: '1px solid #E5E2DE', borderRadius: '8px', backgroundColor: '#FAF6F0' }}>
+                    <div key={idx} className="synced-registry-row">
                       <div>
                         <Link to={`/registry/${t.token}`} style={{ fontSize: '0.85rem', fontWeight: 600, color: '#B97C52', textDecoration: 'underline' }}>
                           {t.token}

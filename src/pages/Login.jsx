@@ -155,16 +155,7 @@ function Login() {
       )}
 
       {/* Main Login Card */}
-      <div className="login-form-card" style={{
-        width: '100%',
-        maxWidth: '460px',
-        backgroundColor: '#FFFFFF',
-        border: '1px solid #E5E2DE',
-        borderRadius: '16px',
-        padding: '50px 40px',
-        boxShadow: '0 25px 60px rgba(28, 27, 26, 0.03)',
-        transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-      }}>
+      <div className="login-form-card">
 
         {/* Title */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>

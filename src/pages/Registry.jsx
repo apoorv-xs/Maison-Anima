@@ -185,18 +185,7 @@ function Registry() {
             <div 
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
-              style={{
-                border: '1px solid #D4AF37',
-                borderRadius: '12px',
-                backgroundColor: '#FAF6F0',
-                padding: '40px',
-                boxShadow: '0 15px 40px rgba(185, 124, 82, 0.04)',
-                position: 'relative',
-                cursor: 'grab',
-                backgroundImage: 'radial-gradient(circle, rgba(212,175,55,0.03) 0%, transparent 100%)',
-                transformStyle: 'preserve-3d',
-                transition: 'transform 0.15s ease-out'
-              }}
+              className="calligraphic-note-card"
             >
               <div style={{
                 textAlign: 'center',
@@ -247,10 +236,10 @@ function Registry() {
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                 {sharedCart.map((item, index) => (
-                  <div key={index} style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '30px', borderBottom: index < sharedCart.length - 1 ? '1px solid #E5E2DE' : 'none', paddingBottom: index < sharedCart.length - 1 ? '30px' : '0' }}>
+                  <div key={index} className="registry-item-card" style={{ borderBottom: index < sharedCart.length - 1 ? '1px solid #E5E2DE' : 'none', paddingBottom: index < sharedCart.length - 1 ? '30px' : '0' }}>
                     
                     {/* Item Image with Monogram rendered if it is custom bag */}
-                    <div style={{ position: 'relative', width: '130px', height: '130px', overflow: 'hidden', borderRadius: '8px', backgroundColor: '#F6F3EF' }}>
+                    <div className="registry-item-img-wrapper">
                       <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       {item.monogram && (
                         <div 
@@ -304,7 +293,7 @@ function Registry() {
               
               {/* Comment submission form */}
               <form onSubmit={handleAddComment} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '40px' }} className="font-sans">
-                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
+                <div className="guestbook-fields-layout">
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     <label style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#6A6764' }}>Guest Name</label>
                     <input 
@@ -377,15 +366,6 @@ function Registry() {
                     <div 
                       key={c.id} 
                       className={`comment-card ${i === 0 ? 'comment-card-new' : ''}`}
-                      style={{ 
-                        display: 'flex', 
-                        gap: '20px', 
-                        alignItems: 'start', 
-                        padding: '20px', 
-                        borderRadius: '8px', 
-                        backgroundColor: '#FAF6F0',
-                        border: '1px solid #E5E2DE'
-                      }}
                     >
                       {/* Wax Seal Initials */}
                       <div className="monogram-gold" style={{
