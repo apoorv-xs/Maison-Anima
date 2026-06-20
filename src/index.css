@@ -115,7 +115,7 @@ a {
     background-color: rgba(253, 251, 247, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    transition: var(--transition-smooth);
+    transition: background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-header.scrolled {
