@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider, useCart } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
@@ -77,6 +77,47 @@ function AppShell() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBagOpen, setIsBagOpen] = useState(false);
   const isScrolled = useScrollPosition(50);
+  const location = useLocation();
+  const hasPushedRef = useRef(false);
+
+  // Close drawers when route pathname changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsBagOpen(false);
+    hasPushedRef.current = false;
+  }, [location.pathname]);
+
+  // Handle browser back button press
+  useEffect(() => {
+    const handlePopState = () => {
+      if (isMenuOpen || isBagOpen) {
+        hasPushedRef.current = false;
+        setIsMenuOpen(false);
+        setIsBagOpen(false);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [isMenuOpen, isBagOpen]);
+
+  // Sync drawer state to browser history
+  useEffect(() => {
+    const anyOpen = isMenuOpen || isBagOpen;
+    if (anyOpen) {
+      if (!hasPushedRef.current) {
+        window.history.pushState({ drawerOpen: true }, '');
+        hasPushedRef.current = true;
+      }
+    } else {
+      if (hasPushedRef.current) {
+        hasPushedRef.current = false;
+        if (window.history.state && window.history.state.drawerOpen) {
+          window.history.back();
+        }
+      }
+    }
+  }, [isMenuOpen, isBagOpen]);
 
   // GSAP Header Animations
   useEffect(() => {
